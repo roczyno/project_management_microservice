@@ -11,3 +11,5 @@ z
 Jservices/user-service/src/main/java/com/roczyno/userservice/user/User.java,4\7\476a3a1e9b1777a16fcd129e32651b61c753adec
 z
 Jservices/user-service/src/main/java/com/roczyno/userservice/user/Role.java,7\4\7498a2dc56116e4ca6be76f92fa51cd9da8e64a6
+M
+services/user-service/pom.xml,d\c\dcf436a1e67438ce3a197b9fb53a6d6518696e4c

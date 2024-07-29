@@ -21,12 +21,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
+@Entity
 public class User implements UserDetails, Principal {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

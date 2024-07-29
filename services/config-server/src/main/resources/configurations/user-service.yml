@@ -19,3 +19,19 @@ spring:
     user: postgres
     password: roczyno
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: adiabajacob9@gmail.com
+    password: yxysexiqozqnyrke
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  application:
+    mailing:
+      frontend:
+        activation-url: http://localhost:5000

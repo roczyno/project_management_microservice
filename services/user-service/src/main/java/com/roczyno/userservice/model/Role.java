@@ -1,4 +1,4 @@
-package com.roczyno.userservice.user;
+package com.roczyno.userservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;

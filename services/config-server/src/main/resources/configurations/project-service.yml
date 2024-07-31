@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/project_db
+    username: postgres
+    password: roczyno
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    out-of-order: false
+    schemas: public
+    clean-disabled: true
+    user: postgres
+    password: roczyno
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: adiabajacob9@gmail.com
+    password: yxysexiqozqnyrke
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  application:
+    mailing:
+      frontend:
+        activation-url: http://localhost:5000

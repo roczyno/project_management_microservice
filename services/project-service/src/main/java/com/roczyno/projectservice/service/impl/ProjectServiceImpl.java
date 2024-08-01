@@ -1,5 +1,7 @@
 package com.roczyno.projectservice.service.impl;
 
+import com.roczyno.projectservice.external.user.UserResponse;
+import com.roczyno.projectservice.external.user.UserService;
 import com.roczyno.projectservice.model.Project;
 import com.roczyno.projectservice.repository.ProjectRepository;
 import com.roczyno.projectservice.request.ProjectRequest;
@@ -17,18 +19,21 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper mapper;
+	private final UserService userService;
 
 	@Override
-	public ProjectResponse createProject(ProjectRequest req, Integer userId) {
+	public ProjectResponse createProject(ProjectRequest req, String jwt) {
+		UserResponse user=userService.getUserProfile(jwt);
 		Project project= Project.builder()
 				.name(req.name())
 				.description(req.description())
 				.tags(req.tags())
 				.category(req.category())
 				.createdAt(LocalDateTime.now())
-				.userId(userId)
+				.userId(user.id())
 				.build();
-		return mapper.mapToProjectResponse(project);
+		Project savedProject= projectRepository.save(project);
+		return mapper.mapToProjectResponse(savedProject);
 	}
 
 	@Override
@@ -39,8 +44,9 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<ProjectResponse> getProjectByTeam(Integer userId, String category, String tag) {
-		List<Project> projects=projectRepository.findByTeamOrOwner(userId,userId);
+	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
+		UserResponse user=userService.getUserProfile(jwt);
+		List<Project> projects=projectRepository.findByTeamOrOwner(user.id(),user.id());
 		if(category!=null){
 			projects=projects.stream().filter(project -> project.getCategory().equals(category))
 					.toList();
@@ -56,10 +62,11 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public String deleteProject(Integer projectId, Integer userId) {
+	public String deleteProject(Integer projectId, String jwt) {
+		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
 				.orElseThrow(()-> new RuntimeException("project not found"));
-		if(!project.getUserId().equals(userId)){
+		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can delete it");
 		}
 		projectRepository.delete(project);
@@ -67,10 +74,11 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, Integer userId) {
+	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
+		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
 				.orElseThrow(()-> new RuntimeException("project not found"));
-		if(!project.getUserId().equals(userId)){
+		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can delete it");
 		}
 		if(req.name()!=null){
@@ -91,35 +99,37 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public String addUserToProject(Integer projectId, Integer userId) {
+	public String addUserToProject(Integer projectId, String jwt) {
+		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
 				.orElseThrow(()-> new RuntimeException("project not found"));
-		if(!project.getUserId().equals(userId)){
+		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can add a user to it");
 		}
-		if(project.getTeamMemberIds().contains(userId)){
+		if(project.getTeamMemberIds().contains(user.id())){
 			throw new RuntimeException("User already part of team");
 		}
-		project.getTeamMemberIds().add(userId);
+		project.getTeamMemberIds().add(user.id());
 		return "user added successfully";
 	}
 
 	@Override
-	public String removeUserFromProject(Integer projectId, Integer userId) {
+	public String removeUserFromProject(Integer projectId, String jwt) {
+		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
 				.orElseThrow(()-> new RuntimeException("project not found"));
-		if(!project.getUserId().equals(userId)){
+		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can add a user to it");
 		}
-		if(!project.getTeamMemberIds().contains(userId)){
+		if(!project.getTeamMemberIds().contains(user.id())){
 			throw new RuntimeException("User not part of group or already removed form group");
 		}
-		project.getTeamMemberIds().remove(userId);
+		project.getTeamMemberIds().remove(user.id());
 		return "User removed successfully";
 	}
 
 	@Override
-	public List<ProjectResponse> searchProject(String keyword, Integer userId) {
+	public List<ProjectResponse> searchProject(String keyword, String jwt) {
 		return List.of();
 	}
 }

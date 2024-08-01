@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 //	@Value("${spring.application.security.jwt.secret-key}")
-	private static final String secretKey="ghsdkggkhskgskghslkghsljghslgjshgljsghlsghslhl";
+	private static final String secretKey="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 //	@Value("${spring.application.security.jwt.expiration}")
 	private static final long jwtExpiration=82300000;
 

@@ -6,19 +6,19 @@ import com.roczyno.projectservice.response.ProjectResponse;
 import java.util.List;
 
 public interface ProjectService {
-	ProjectResponse createProject(ProjectRequest project, Integer userId);
+	ProjectResponse createProject(ProjectRequest project, String jwt);
 
 	ProjectResponse getProject(Integer projectId);
 
-	List<ProjectResponse> getProjectByTeam(Integer userId, String category, String tag);
+	List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag);
 
-	String deleteProject(Integer projectId, Integer userId);
+	String deleteProject(Integer projectId, String jwt);
 
-	ProjectResponse updateProject(Integer projectId, ProjectRequest project, Integer userId);
+	ProjectResponse updateProject(Integer projectId, ProjectRequest project, String jwt);
 
-	String addUserToProject(Integer projectId, Integer userId);
+	String addUserToProject(Integer projectId, String jwt);
 
-	String removeUserFromProject(Integer projectId, Integer userId);
+	String removeUserFromProject(Integer projectId, String jwt);
 
-	List<ProjectResponse> searchProject(String keyword,Integer userId);
+	List<ProjectResponse> searchProject(String keyword,String jwt);
 }

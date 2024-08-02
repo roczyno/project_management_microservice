@@ -19,4 +19,10 @@ public class UserServiceImpl implements UserService {
 		User user= (User) connectedUser.getPrincipal();
 		return mapper.mapToUserResponse(userRepository.findByEmail(user.getEmail()));
 	}
+
+	@Override
+	public UserResponse findUserById(Integer userId) {
+		User user= userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+		return mapper.mapToUserResponse(user);
+	}
 }

@@ -4,6 +4,8 @@ import com.roczyno.invitationservice.external.project.ProjectResponse;
 import com.roczyno.invitationservice.external.project.ProjectService;
 import com.roczyno.invitationservice.external.user.UserResponse;
 import com.roczyno.invitationservice.external.user.UserService;
+import com.roczyno.invitationservice.kafka.InvitationConfirmation;
+import com.roczyno.invitationservice.kafka.InvitationProducer;
 import com.roczyno.invitationservice.model.Invitation;
 import com.roczyno.invitationservice.repository.InvitationRepository;
 import com.roczyno.invitationservice.service.InvitationService;
@@ -18,6 +20,7 @@ public class InvitationServiceImpl implements InvitationService {
 	private final InvitationRepository invitationRepository;
 	private final ProjectService projectService;
 	private final UserService userService;
+	private final InvitationProducer invitationProducer;
 
 	@Override
 	public String sendInvitation(String email, Integer projectId,String jwt) {
@@ -34,8 +37,13 @@ public class InvitationServiceImpl implements InvitationService {
 				.build();
 		invitationRepository.save(invitation);
 
-		//send email notification
-		return "";
+		invitationProducer.sendInviteConfirmation(new InvitationConfirmation(
+				email,
+				user.username(),
+				"Invite to Project Team",
+				project.name()
+		));
+		return "Invitation sent successfully";
 	}
 
 	@Override
@@ -46,7 +54,6 @@ public class InvitationServiceImpl implements InvitationService {
 			throw new RuntimeException();
 		}
 		projectService.addUserToProject(invitation.getProjectId(), jwt);
-		//send email notification
 		return invitation;
 	}
 }

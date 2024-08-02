@@ -97,3 +97,11 @@ kservices/notification-service/src/main/java/com/roczyno/notificationservice/kaf
 cservices/notification-service/src/main/java/com/roczyno/notificationservice/email/EmailService.java,a\3\a36a2e84803dadd052874feb1a4cab636494cca6
 ”
 dservices/notification-service/src/main/java/com/roczyno/notificationservice/email/EmailTemplate.java,0\5\052da2262be9815a90a70d22cc7c5b549d54e2fb
+š
+jservices/invitation-service/src/main/java/com/roczyno/invitationservice/config/KafkaInviteTopicConfig.java,3\8\3866650d20e39ac529e84c90495b1c26ee744ee4
+S
+#services/invitation-service/pom.xml,e\1\e136b9593b3f13db3c26728205bc4fcdc81277ff
+•
+eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationProducer.java,3\5\35e4a7c07f490e0bccb99cc348b8b51d76bb9618
+™
+iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546

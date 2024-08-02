@@ -35,3 +35,11 @@ spring:
     mailing:
       frontend:
         activation-url: http://localhost:5000
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: userConfirmation:com.roczyno.userservice.kafka.UserConfirmation

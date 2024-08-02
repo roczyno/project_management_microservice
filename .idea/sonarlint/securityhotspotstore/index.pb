@@ -69,3 +69,11 @@ Wservices/user-service/src/main/java/com/roczyno/userservice/UserServiceApplicat
 lservices/invitation-service/src/main/java/com/roczyno/invitationservice/controller/InvitationController.java,b\6\b623d2a6688bfdd6bc5e2224393dc0e0d6e73d99
 ’
 bservices/invitation-service/src/main/java/com/roczyno/invitationservice/request/InviteRequest.java,8\5\857f0aa48b077c645f62fb9cfb786ae3cb8454a3
+“
+cservices/notification-service/src/main/java/com/roczyno/notificationservice/model/Notification.java,5\2\5240d98e74771dc341d441494ddefe8952f94017
+—
+gservices/notification-service/src/main/java/com/roczyno/notificationservice/model/NotificationType.java,4\6\462f8f3a2b90042be99badf416fdc942efe1020a
+M
+services/user-service/pom.xml,d\c\dcf436a1e67438ce3a197b9fb53a6d6518696e4c
+†
+Vservices/user-service/src/main/java/com/roczyno/userservice/kafka/UserTopicConfig.java,f\d\fd75cd7231771533349cd689e6bf51edbd1df0eb

@@ -17,7 +17,6 @@ import com.roczyno.userservice.request.PasswordResetRequest;
 import com.roczyno.userservice.request.PasswordUpdateRequest;
 import com.roczyno.userservice.request.RegistrationRequest;
 import com.roczyno.userservice.response.AuthResponse;
-import com.roczyno.userservice.util.UserMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +45,6 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
 	private final ForgotPasswordTokenRepository forgotPasswordTokenRepository;
-	private final UserMapper userMapper;
 	private final UserProducer userProducer;
 
 
@@ -54,7 +52,7 @@ public class AuthenticationService {
 	private String activationUrl;
 
 	@Transactional
-	public String register(RegistrationRequest req) throws MessagingException {
+	public String register(RegistrationRequest req)  {
 		User isEmailExist= userRepository.findByEmail(req.email());
 		if(isEmailExist!=null){
 			throw new RuntimeException("User with this email already exists");

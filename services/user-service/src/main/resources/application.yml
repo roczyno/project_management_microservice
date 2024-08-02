@@ -3,6 +3,13 @@ spring:
    name: user-service
   config:
     import: optional:configserver:http://localhost:8888
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: userConfirmation:com.roczyno.userservice.kafka.UserConfirmation
 server:
   port: 8090
 

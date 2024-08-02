@@ -85,3 +85,15 @@ Uservices/user-service/src/main/java/com/roczyno/userservice/service/EmailServic
 Sservices/user-service/src/main/java/com/roczyno/userservice/kafka/UserProducer.java,a\6\a65379ac173af35ee18762c21efa0d57e409ce8e
 Ž
 ^services/user-service/src/main/java/com/roczyno/userservice/service/AuthenticationService.java,a\f\af002dee50d2417b74d5af528b88ba04c4e765e1
+B
+docker-compose.yml,3\5\35b8c13cf2eb2a194eada000eb310d65aed53b2a
+—
+gservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/UserConfirmation.java,a\c\ac1fa6a0298cf331b7fd84cae1143011c85ba11e
+¢
+rservices/notification-service/src/main/java/com/roczyno/notificationservice/repository/NotificationRepository.java,9\1\916a4413d84807fbb6b1fe2023bb657bb1f5b011
+›
+kservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/NotificationConsumer.java,f\4\f4a67328527a2dac765d5bc3273c5c5b2f513b45
+“
+cservices/notification-service/src/main/java/com/roczyno/notificationservice/email/EmailService.java,a\3\a36a2e84803dadd052874feb1a4cab636494cca6
+”
+dservices/notification-service/src/main/java/com/roczyno/notificationservice/email/EmailTemplate.java,0\5\052da2262be9815a90a70d22cc7c5b549d54e2fb

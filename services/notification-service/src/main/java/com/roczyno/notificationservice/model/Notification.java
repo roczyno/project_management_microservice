@@ -1,5 +1,6 @@
 package com.roczyno.notificationservice.model;
 
+import com.roczyno.notificationservice.kafka.UserConfirmation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,9 @@ import java.time.LocalDateTime;
 public class Notification {
 	@Id
 	private String id;
-	private NotificationType type;
+	private NotificationType notificationType;
 	private LocalDateTime notificationDate;
+	private UserConfirmation userConfirmation;
+
 
 }

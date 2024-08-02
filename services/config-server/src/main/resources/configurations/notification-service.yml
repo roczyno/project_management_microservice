@@ -1,0 +1,35 @@
+spring:
+  data:
+    mongodb:
+      username: roczyno
+      password: roczyno
+      host: localhost
+      port: 27017
+      database: customer
+      authentication-database: admin
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: userGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: userConfirmation:com.roczyno.notificationservice.kafka.UserConfirmation
+
+
+
+
+  mail:
+    host: localhost
+    port: 1025
+    username: adiabajacob9@gmail.com
+    password: dsjksjfjs
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

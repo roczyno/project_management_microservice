@@ -2,6 +2,8 @@ package com.roczyno.userservice.service;
 
 
 import com.roczyno.userservice.config.JwtService;
+import com.roczyno.userservice.kafka.UserConfirmation;
+import com.roczyno.userservice.kafka.UserProducer;
 import com.roczyno.userservice.model.ForgotPasswordToken;
 import com.roczyno.userservice.model.Token;
 import com.roczyno.userservice.repository.ForgotPasswordTokenRepository;
@@ -45,6 +47,7 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final ForgotPasswordTokenRepository forgotPasswordTokenRepository;
 	private final UserMapper userMapper;
+	private final UserProducer userProducer;
 
 
 	@Value("${spring.application.mailing.frontend.activation-url}")
@@ -69,7 +72,16 @@ public class AuthenticationService {
 				.roles(List.of(userRole))
 				.build();
 		var savedUser=userRepository.save(user);
-		sendValidationEmail(savedUser);
+		var newToken = generateAndSaveActivationToken(user);
+//		sendValidationEmail(savedUser);
+		userProducer.sendUserConfirmation(new UserConfirmation(
+				savedUser.getEmail(),
+				savedUser.getUsername(),
+				newToken,
+				activationUrl,
+				"account-activation"
+
+		));
 		return "user created successfully";
 	}
 

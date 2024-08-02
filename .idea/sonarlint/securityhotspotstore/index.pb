@@ -77,3 +77,11 @@ M
 services/user-service/pom.xml,d\c\dcf436a1e67438ce3a197b9fb53a6d6518696e4c
 †
 Vservices/user-service/src/main/java/com/roczyno/userservice/kafka/UserTopicConfig.java,f\d\fd75cd7231771533349cd689e6bf51edbd1df0eb
+‡
+Wservices/user-service/src/main/java/com/roczyno/userservice/kafka/UserConfirmation.java,9\1\91602f410a79af057fdee920027ba87e1a51e960
+…
+Uservices/user-service/src/main/java/com/roczyno/userservice/service/EmailService.java,9\f\9fb76cdc051c7686938fa58c1f2a6a4a887584bd
+ƒ
+Sservices/user-service/src/main/java/com/roczyno/userservice/kafka/UserProducer.java,a\6\a65379ac173af35ee18762c21efa0d57e409ce8e
+Ž
+^services/user-service/src/main/java/com/roczyno/userservice/service/AuthenticationService.java,a\f\af002dee50d2417b74d5af528b88ba04c4e765e1

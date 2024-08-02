@@ -105,3 +105,5 @@ S
 eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationProducer.java,3\5\35e4a7c07f490e0bccb99cc348b8b51d76bb9618
 ™
 iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546
+™
+iservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/InviteConfirmation.java,4\9\49407afd8acfdb3468d4d638aacbbd7bad6ddd90

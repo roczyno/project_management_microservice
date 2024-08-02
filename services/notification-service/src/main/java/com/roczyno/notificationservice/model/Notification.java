@@ -1,5 +1,6 @@
 package com.roczyno.notificationservice.model;
 
+import com.roczyno.notificationservice.kafka.InviteConfirmation;
 import com.roczyno.notificationservice.kafka.UserConfirmation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Notification {
 	private NotificationType notificationType;
 	private LocalDateTime notificationDate;
 	private UserConfirmation userConfirmation;
+	private InviteConfirmation inviteConfirmation;
 
 
 }

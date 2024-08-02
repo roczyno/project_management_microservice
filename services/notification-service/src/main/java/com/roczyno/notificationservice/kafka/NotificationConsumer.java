@@ -46,4 +46,29 @@ public class NotificationConsumer {
 		}
 
 	}
+
+	@KafkaListener(topics = "invite-topic")
+	public void consumeInviteConfirmationSuccess(InviteConfirmation inviteConfirmation){
+		log.info(format("Consuming the message from invite-topic Topic:: %s",inviteConfirmation));
+		notificationRepository.save(
+				Notification.builder()
+						.notificationDate(LocalDateTime.now())
+						.inviteConfirmation(inviteConfirmation)
+						.notificationType(NotificationType.INVITE_CONFIRMATION)
+						.build()
+		);
+		try {
+			emailService.sendInviteEmail(
+					inviteConfirmation.to(),
+					inviteConfirmation.senderName(),
+					EmailTemplate.SEND_INVITE,
+					inviteConfirmation.subject(),
+					inviteConfirmation.projectName(),
+					inviteConfirmation.InvitationUrl()
+			);
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 }

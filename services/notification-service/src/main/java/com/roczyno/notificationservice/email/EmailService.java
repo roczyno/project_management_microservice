@@ -51,7 +51,7 @@ public class EmailService {
 		Context context = new Context();
 		context.setVariables(properties);
 
-		helper.setFrom("contact@aliboucoding.com");
+		helper.setFrom("adiabajacob9@gmail.com");
 		helper.setTo(to);
 		helper.setSubject(subject);
 
@@ -61,4 +61,46 @@ public class EmailService {
 
 		mailSender.send(mimeMessage);
 	}
+
+	public void sendInviteEmail(
+			String to,
+			String senderName,
+			EmailTemplate emailTemplate,
+			String subject,
+			String projectName,
+			String invitationUrl
+
+	) throws MessagingException {
+		String templateName;
+		if (emailTemplate == null) {
+			templateName = "confirm-email";
+		} else {
+			templateName = emailTemplate.name();
+		}
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(
+				mimeMessage,
+				MULTIPART_MODE_MIXED,
+				UTF_8.name()
+		);
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("senderName", senderName);
+		properties.put("projectName", projectName);
+		properties.put("invitationUrl", invitationUrl);
+
+		Context context = new Context();
+		context.setVariables(properties);
+
+		helper.setFrom("adiabajacob9@gmail.com");
+		helper.setTo(to);
+		helper.setSubject(subject);
+
+		String template = templateEngine.process(templateName, context);
+
+		helper.setText(template, true);
+
+		mailSender.send(mimeMessage);
+	}
+
+
 }

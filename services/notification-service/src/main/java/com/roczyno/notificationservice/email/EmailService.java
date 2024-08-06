@@ -63,6 +63,7 @@ public class EmailService {
 		mailSender.send(mimeMessage);
 	}
 
+	@Async
 	public void sendInviteEmail(
 			String to,
 			String senderName,
@@ -106,6 +107,7 @@ public class EmailService {
 
 
 
+	@Async
 	public void sendAssignIssue(String userEmail, String senderName, EmailTemplate emailTemplate, String subject,
 								String projectName, String priority, LocalDate localDate, String status, String title,
 								String description) throws MessagingException {

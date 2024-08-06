@@ -45,7 +45,7 @@ public class IssueController {
 	public ResponseEntity<IssueResponse> addUserToIssue(@PathVariable Integer issueId,@PathVariable Integer userId){
 		return ResponseEntity.ok(issueService.addUserToIssue(userId,issueId));
 	}
-	@PutMapping("/{issueId}")
+	@PutMapping("/status/{issueId}")
 	public ResponseEntity<IssueResponse> updateIssueStatus(@RequestParam String status,@PathVariable Integer issueId){
 		return ResponseEntity.ok(issueService.updateIssueStatus(issueId,status));
 	}

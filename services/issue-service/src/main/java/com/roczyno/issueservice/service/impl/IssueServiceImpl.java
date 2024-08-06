@@ -75,6 +75,7 @@ public class IssueServiceImpl implements IssueService {
 		issue.setAssigneeId(userId);
 		Issue savedIssue=issueRepository.save(issue);
 		ProjectResponse project=projectService.getProject(savedIssue.getProjectId());
+		UserResponse user=userService.getUserById(userId);
 		//send email notification
 		issueProducer.sendIssueConfirmation(new IssueConfirmation(
 				savedIssue.getId(),
@@ -83,7 +84,10 @@ public class IssueServiceImpl implements IssueService {
 				savedIssue.getStatus(),
 				savedIssue.getPriority(),
 				savedIssue.getDueDate(),
-				project.name()
+				project.name(),
+				user.email(),
+				"Assigned Issue",
+				"Admin"
 		));
 		return mapper.toIssueResponse(savedIssue);
 

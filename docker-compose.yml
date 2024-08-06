@@ -1,6 +1,6 @@
 services:
   postgres:
-    container_name: ms_pq_sql
+    container_name: pm_pq_sql
     image: postgres
     environment:
       POSTGRES_USER: roczyno
@@ -11,11 +11,11 @@ services:
     ports:
       - 1234:5432
     networks:
-      - microservice_net
+      - pm_microservice_net
     restart: unless-stopped
 
   mongoDB:
-    container_name: ms_mongo_db
+    container_name: pm_mongo_db
     image: mongo
     ports:
       - 27017:27017
@@ -25,78 +25,71 @@ services:
       MONGO_INITDB_ROOT_USERNAME: roczyno
       MONGO_INITDB_ROOT_PASSWORD: roczyno
     networks:
-      - microservice_net
-
+      - pm_microservice_net
 
   mongo_express:
-    container_name: ms_mongo_express
+    container_name: pm_mongo_express
     image: mongo-express
     restart: unless-stopped
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_SERVER: mongoDB
       ME_CONFIG_MONGODB_ADMINUSERNAME: roczyno
       ME_CONFIG_MONGODB_ADMINPASSWORD: roczyno
     networks:
-      - microservice_net
-
-
+      - pm_microservice_net
 
   mail_dev:
-    container_name: ms_mail_dev
+    container_name: pm_mail_dev
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
     networks:
-      - microservice_net
+      - pm_microservice_net
 
-    zookeeper:
-      image: confluentinc/cp-zookeeper:latest
-      container_name: zookeeper
-      environment:
-        ZOOKEEPER_SERVER_ID: 1
-        ZOOKEEPER_CLIENT_PORT: 2181
-        ZOOKEEPER_TICK_TIME: 2000
-      ports:
-        - 22181:2181
-      networks:
-        - microservice_net
-    kafka:
-      image: confluentinc/cp-kafka:latest
-      container_name: ms-kafka
-      ports:
-        - "9092:9092"
-      depends_on:
-        - zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: pm_zookeeper
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - pm_microservice_net
 
-      environment:
-        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      networks:
-        - microservice_net
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: pm-kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    networks:
+      - pm_microservice_net
 
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - pm_microservice_net
 
-    zipkin:
-      container_name: zipkin
-      image: openzipkin/zipkin
-      ports:
-        - "9411:9411"
-      networks:
-        - microservices-net
+networks:
+  pm_microservice_net:
+    driver: bridge
 
-
-  networks:
-    microservice_net:
-      driver: bridge
-
-  volumes:
-    postgres:
-    pgadmin:
-    mongo:
-
+volumes:
+  postgres:
+  mongo:

@@ -41,7 +41,8 @@ public class InvitationServiceImpl implements InvitationService {
 				email,
 				user.username(),
 				"Invite to Project Team",
-				project.name()
+				project.name(),
+				"khkhkhkh"
 		));
 		return "Invitation sent successfully";
 	}

@@ -1,4 +1,4 @@
-package com.roczyno.issueservice.kafka;
+package com.roczyno.notificationservice.kafka;
 
 import java.time.LocalDate;
 

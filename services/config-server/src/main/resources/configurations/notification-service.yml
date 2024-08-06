@@ -17,7 +17,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-        spring.json.type.mapping: userConfirmation:com.roczyno.notificationservice.kafka.UserConfirmation,inviteConfirmation:com.roczyno.notificationservice.kafka.InviteConfirmation
+        spring.json.type.mapping: userConfirmation:com.roczyno.notificationservice.kafka.UserConfirmation,inviteConfirmation:com.roczyno.notificationservice.kafka.InviteConfirmation,issueConfirmation:com.roczyno.notificationservice.kafka.IssueConfirmation
 
 
 

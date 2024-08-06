@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,4 +104,42 @@ public class EmailService {
 	}
 
 
+
+
+	public void sendAssignIssue(String userEmail, String senderName, EmailTemplate emailTemplate, String subject,
+								String projectName, String priority, LocalDate localDate, String status, String title,
+								String description) throws MessagingException {
+		String templateName;
+		if (emailTemplate == null) {
+			templateName = "confirm-email";
+		} else {
+			templateName = emailTemplate.getName();
+		}
+
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper;
+
+			helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED, "UTF-8");
+
+			Map<String, Object> properties = new HashMap<>();
+			properties.put("senderName", senderName);
+			properties.put("projectName", projectName);
+			properties.put("priority", priority);
+			properties.put("localDate", localDate);
+			properties.put("status", status);
+			properties.put("title", title);
+			properties.put("description", description);
+			Context context = new Context();
+			context.setVariables(properties);
+			helper.setFrom("adiabajacob9@gmail.com");
+			helper.setTo(userEmail);
+			helper.setSubject(subject);
+
+			String template = templateEngine.process(templateName, context);
+
+			helper.setText(template, true);
+
+			mailSender.send(mimeMessage);
+
+	}
 }

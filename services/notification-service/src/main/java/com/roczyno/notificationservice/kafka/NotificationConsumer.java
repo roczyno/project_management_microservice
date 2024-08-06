@@ -71,4 +71,34 @@ public class NotificationConsumer {
 		}
 
 	}
+
+	@KafkaListener(topics = "issue-topic")
+	public void consumeIssueConfirmationSuccess(IssueConfirmation issueConfirmation){
+		log.info(format("Consuming the message from issue-topic Topic:: %s",issueConfirmation));
+		notificationRepository.save(
+				Notification.builder()
+						.notificationDate(LocalDateTime.now())
+						.issueConfirmation(issueConfirmation)
+						.notificationType(NotificationType.ISSUE_CONFIRMATION)
+						.build()
+		);
+		try {
+			emailService.sendAssignIssue(
+					issueConfirmation.userEmail(),
+					issueConfirmation.senderName(),
+					EmailTemplate.SEND_ISSUE,
+					issueConfirmation.subject(),
+					issueConfirmation.projectName(),
+					issueConfirmation.priority(),
+					issueConfirmation.dueDate(),
+					issueConfirmation.status(),
+					issueConfirmation.title(),
+					issueConfirmation.description()
+			);
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
 }

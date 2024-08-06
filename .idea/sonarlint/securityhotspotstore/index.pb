@@ -145,3 +145,5 @@ _services/issue-service/src/main/java/com/roczyno/issueservice/config/KafkaIssue
 Vservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueProducer.java,1\8\1821c1c2a78f2b10b6ae9d16bac28d85c69564a3
 Š
 Zservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueConfirmation.java,b\8\b83626135499a75be8c44e08db245dad60b2ce22
+˜
+hservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/IssueConfirmation.java,5\5\555f67408aeabbd53cb94863e61f5479bf5112f3

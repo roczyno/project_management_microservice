@@ -115,8 +115,6 @@ Nservices/issue-service/src/main/java/com/roczyno/issueservice/model/Issue.java
 Wservices/issue-service/src/main/java/com/roczyno/issueservice/service/IssueService.java,8\d\8d349b0c52a70d6d993bfca3e9c4a7e8611e360e
 ê
 `services/issue-service/src/main/java/com/roczyno/issueservice/service/impl/IssueServiceImpl.java,f\f\ff9185daa6957b1387c909f6f14ea02fd0c49159
-{
-Kservices/issue-service/src/main/java/com/roczyno/issueservice/external.java,d\2\d237dd448d673049d49a3bb6436d9f52fda20dd2
 ì
 cservices/issue-service/src/main/java/com/roczyno/issueservice/external/project/ProjectResponse.java,d\9\d91a29d66c330a23221a0f924fff959539b6dfba
 í
@@ -141,3 +139,5 @@ Sservices/issue-service/src/main/java/com/roczyno/issueservice/util/IssueMapper.
 fservices/discovery-service/src/main/java/com/roczyno/discoveryservice/DiscoveryServiceApplication.java,4\0\40c8cdf0a67f62a4ab5c5ea3142a40a7f26f3c2a
 ä
 Zservices/config-server/src/main/java/com/roczyno/configserver/ConfigServerApplication.java,b\b\bb15336dd9de67fde93b7769eeca0ee46a5658d2
+è
+_services/issue-service/src/main/java/com/roczyno/issueservice/config/KafkaIssueTopicConfig.java,c\3\c3e5d8f6d91bcaf7efa819e3dce4543113934644

@@ -8,10 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="issue-service" />
+        <module name="invitation-service" />
         <module name="user-service" />
         <module name="project-service" />
         <module name="discovery-service" />
-        <module name="invitation-service" />
+        <module name="notification-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +22,8 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="invitation-service" options="-parameters" />
+      <module name="issue-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="project-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

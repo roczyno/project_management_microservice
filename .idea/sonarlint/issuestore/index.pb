@@ -141,3 +141,7 @@ fservices/discovery-service/src/main/java/com/roczyno/discoveryservice/Discovery
 Zservices/config-server/src/main/java/com/roczyno/configserver/ConfigServerApplication.java,b\b\bb15336dd9de67fde93b7769eeca0ee46a5658d2
 è
 _services/issue-service/src/main/java/com/roczyno/issueservice/config/KafkaIssueTopicConfig.java,c\3\c3e5d8f6d91bcaf7efa819e3dce4543113934644
+Ü
+Vservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueProducer.java,1\8\1821c1c2a78f2b10b6ae9d16bac28d85c69564a3
+ä
+Zservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueConfirmation.java,b\8\b83626135499a75be8c44e08db245dad60b2ce22

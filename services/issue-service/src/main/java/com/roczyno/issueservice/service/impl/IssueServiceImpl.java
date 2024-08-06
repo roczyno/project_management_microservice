@@ -1,8 +1,11 @@
 package com.roczyno.issueservice.service.impl;
 
+import com.roczyno.issueservice.external.project.ProjectResponse;
 import com.roczyno.issueservice.external.project.ProjectService;
 import com.roczyno.issueservice.external.user.UserResponse;
 import com.roczyno.issueservice.external.user.UserService;
+import com.roczyno.issueservice.kafka.IssueConfirmation;
+import com.roczyno.issueservice.kafka.IssueProducer;
 import com.roczyno.issueservice.model.Issue;
 import com.roczyno.issueservice.repository.IssueRepository;
 import com.roczyno.issueservice.request.IssueRequest;
@@ -21,6 +24,7 @@ public class IssueServiceImpl implements IssueService {
 	private final UserService userService;
 	private final ProjectService projectService;
 	private final IssueMapper mapper;
+	private final IssueProducer issueProducer;
 
 	@Override
 	public IssueResponse createIssue(IssueRequest req, String jwt, Integer projectId) {
@@ -70,7 +74,17 @@ public class IssueServiceImpl implements IssueService {
 		Issue issue=issueRepository.findById(issueId).orElseThrow();
 		issue.setAssigneeId(userId);
 		Issue savedIssue=issueRepository.save(issue);
+		ProjectResponse project=projectService.getProject(savedIssue.getProjectId());
 		//send email notification
+		issueProducer.sendIssueConfirmation(new IssueConfirmation(
+				savedIssue.getId(),
+				savedIssue.getTitle(),
+				savedIssue.getDescription(),
+				savedIssue.getStatus(),
+				savedIssue.getPriority(),
+				savedIssue.getDueDate(),
+				project.name()
+		));
 		return mapper.toIssueResponse(savedIssue);
 
 	}

@@ -169,3 +169,9 @@ P
 `services/comment-service/src/main/java/com/roczyno/commentservice/CommentServiceApplication.java,d\0\d0a87bbda083a763e20b1aae43f6c4d0d8789354
 ‰
 Yservices/comment-service/src/main/java/com/roczyno/commentservice/util/CommentMapper.java,5\4\544b235fd38e372a767a9405de95965d69f4e8bb
+“
+cservices/comment-service/src/main/java/com/roczyno/commentservice/controller/CommentController.java,2\4\24cf40c7e69a029c880d7d7b7818afb17ab87baf
+‘
+aservices/comment-service/src/main/java/com/roczyno/commentservice/controller/ResponseHandler.java,f\9\f9d6f0e0ec6876894ab686b8a3f75252a4054164
+‹
+[services/comment-service/src/main/java/com/roczyno/commentservice/util/ResponseHandler.java,2\f\2f1eabdbeefe4532bdc891d638984edab12688da

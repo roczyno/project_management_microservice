@@ -147,3 +147,25 @@ Vservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueProduc
 Zservices/issue-service/src/main/java/com/roczyno/issueservice/kafka/IssueConfirmation.java,b\8\b83626135499a75be8c44e08db245dad60b2ce22
 ò
 hservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/IssueConfirmation.java,5\5\555f67408aeabbd53cb94863e61f5479bf5112f3
+Ñ
+Tservices/comment-service/src/main/java/com/roczyno/commentservice/model/Comment.java,c\7\c712fc99c9fce5dd5d5e3c1c92064fe32f43c378
+ì
+cservices/comment-service/src/main/java/com/roczyno/commentservice/repository/CommentRepository.java,b\2\b2dca0f10b282cf399f98a9d38293568f4f6b099
+ç
+]services/comment-service/src/main/java/com/roczyno/commentservice/service/CommentService.java,a\1\a163beaa26fa5a4b79a6d334f27c61c470b08781
+ç
+]services/comment-service/src/main/java/com/roczyno/commentservice/request/CommentRequest.java,5\b\5b800a78ef1ac685bb09f49bf789dc9d428334a0
+è
+_services/comment-service/src/main/java/com/roczyno/commentservice/response/CommentResponse.java,5\9\59f4b4a9046596bd13237d91fcb63d0aa39ec50b
+ñ
+fservices/comment-service/src/main/java/com/roczyno/commentservice/service/impl/CommentServiceImpl.java,5\b\5be8533b1b6f44ed846fee92ca99a9d1991c4e64
+ë
+aservices/comment-service/src/main/java/com/roczyno/commentservice/external/user/UserResponse.java,2\9\293841133404b74bac448730580643277fca438d
+ê
+`services/comment-service/src/main/java/com/roczyno/commentservice/external/user/UserService.java,a\3\a3ae8fc421572d5305af0d4e437ea8677d7942e5
+P
+ services/comment-service/pom.xml,d\0\d048df91fe2910e7bc12d532b5b4d6f34a8b11c3
+ê
+`services/comment-service/src/main/java/com/roczyno/commentservice/CommentServiceApplication.java,d\0\d0a87bbda083a763e20b1aae43f6c4d0d8789354
+â
+Yservices/comment-service/src/main/java/com/roczyno/commentservice/util/CommentMapper.java,5\4\544b235fd38e372a767a9405de95965d69f4e8bb

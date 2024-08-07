@@ -223,3 +223,7 @@ M
 Wservices/chat-service/src/main/java/com/roczyno/chatservice/ChatServiceApplication.java,6\d\6d8a5771697b66adfc3feb52e8a70e7229df7953
 É
 Sservices/chat-service/src/main/java/com/roczyno/chatservice/util/MessageMapper.java,3\6\36fa7c06297289488db94a87ad49f302125e3687
+ä
+Zservices/chat-service/src/main/java/com/roczyno/chatservice/controller/ChatController.java,d\b\db79a909fc6b61645f360812bfe556f3b5a89d9a
+ç
+]services/chat-service/src/main/java/com/roczyno/chatservice/controller/MessageController.java,b\f\bffd1b46c2eee642d548cfade4e7622f5f58d8ac

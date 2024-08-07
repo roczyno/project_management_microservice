@@ -11,18 +11,26 @@
         <module name="issue-service" />
         <module name="comment-service" />
         <module name="invitation-service" />
+        <module name="gateway-service" />
+        <module name="chat-service" />
         <module name="user-service" />
         <module name="project-service" />
         <module name="discovery-service" />
         <module name="notification-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gateways" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chat-service" options="-parameters" />
       <module name="comment-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="gateways" options="-parameters" />
       <module name="invitation-service" options="-parameters" />
       <module name="issue-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />

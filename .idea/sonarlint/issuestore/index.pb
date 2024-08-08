@@ -227,3 +227,11 @@ Zservices/chat-service/src/main/java/com/roczyno/chatservice/controller/ChatCont
 Yservices/project-service/src/main/java/com/roczyno/projectservice/external/chat/Chat.java,5\e\5ee959c8ea3535a7ce3506e2d93b199c7b29f210
 ê
 `services/project-service/src/main/java/com/roczyno/projectservice/external/chat/ChatService.java,3\8\388130327312a94d34e7c086b447c8b7d6c77f96
+á
+Wservices/user-service/src/main/java/com/roczyno/userservice/exception/ErrorDetails.java,9\9\995df59b2c73c21880f7c89734cab6d2567329f6
+ã
+[services/user-service/src/main/java/com/roczyno/userservice/exception/GlobalExceptions.java,8\d\8dcb242f974fe6a9d06d9a4a1e423552aa2f6f36
+Ö
+Uservices/user-service/src/main/java/com/roczyno/userservice/util/ResponseHandler.java,1\b\1b13968c47f594c1fd9e704202cb2f5771d68f5b
+à
+Xservices/user-service/src/main/java/com/roczyno/userservice/exception/UserException.java,6\c\6c0d5df3c5f24cc9aed9a9833c336bd090b0ea3a

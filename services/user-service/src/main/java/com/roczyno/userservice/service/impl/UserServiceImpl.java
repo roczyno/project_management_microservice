@@ -1,5 +1,6 @@
 package com.roczyno.userservice.service.impl;
 
+import com.roczyno.userservice.exception.UserException;
 import com.roczyno.userservice.model.User;
 import com.roczyno.userservice.repository.UserRepository;
 import com.roczyno.userservice.response.UserResponse;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponse findUserById(Integer userId) {
-		User user= userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+		User user= userRepository.findById(userId).orElseThrow(()->new UserException("User not found"));
 		return mapper.mapToUserResponse(user);
 	}
 }

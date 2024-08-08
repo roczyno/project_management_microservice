@@ -1,5 +1,6 @@
 package com.roczyno.commentservice.service.impl;
 
+import com.roczyno.commentservice.exception.CommentException;
 import com.roczyno.commentservice.external.user.UserResponse;
 import com.roczyno.commentservice.external.user.UserService;
 import com.roczyno.commentservice.model.Comment;
@@ -51,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentResponse findCommentById(Integer commentId) {
-		Comment comment= commentRepository.findById(commentId).orElseThrow(()-> new RuntimeException("comment not found"));
+		Comment comment= commentRepository.findById(commentId).orElseThrow(()-> new CommentException("comment not found"));
 		return mapper.mapToCommentResponse(comment);
 	}
 
@@ -60,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
 		UserResponse user=userService.getUserProfile(jwt);
 		Comment comment=commentRepository.findById(commentId).orElseThrow();
 		if(!comment.getUserId().equals(user.id())){
-			throw new RuntimeException();
+			throw new CommentException("You are not allowed to update this comment");
 		}
 		if(request.comment()!=null){
 			comment.setComment(request.comment());

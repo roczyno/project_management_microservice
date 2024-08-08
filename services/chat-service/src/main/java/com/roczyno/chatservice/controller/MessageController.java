@@ -1,9 +1,10 @@
 package com.roczyno.chatservice.controller;
 
 import com.roczyno.chatservice.request.MessageRequest;
-import com.roczyno.chatservice.response.MessageResponse;
 import com.roczyno.chatservice.service.MessageService;
+import com.roczyno.chatservice.util.ResponseHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/message")
@@ -24,25 +23,25 @@ public class MessageController {
 	private final MessageService messageService;
 
 	@PostMapping("/chat/{chatId}")
-	public ResponseEntity<MessageResponse> sendMessage(@PathVariable Integer chatId, @RequestBody MessageRequest req,
+	public ResponseEntity<Object> sendMessage(@PathVariable Integer chatId, @RequestBody MessageRequest req,
 													   @RequestHeader("Authorization") String jwt){
-		return ResponseEntity.ok(messageService.sendMessage(req,chatId,jwt));
+		return ResponseHandler.successResponse(messageService.sendMessage(req,chatId,jwt), HttpStatus.OK);
 	}
 
 	@GetMapping("/chat/{chatId}")
-	public ResponseEntity<List<MessageResponse>> getChatMessages(@PathVariable Integer chatId){
-		return ResponseEntity.ok(messageService.getChatsMessages(chatId));
+	public ResponseEntity<Object> getChatMessages(@PathVariable Integer chatId){
+		return ResponseHandler.successResponse(messageService.getChatsMessages(chatId),HttpStatus.OK);
 	}
 
 	@DeleteMapping("/chat/{chatId}")
-	public ResponseEntity<String> deleteMessage(@PathVariable Integer chatId,@RequestHeader("Authorization") String jwt){
-		return ResponseEntity.ok(messageService.deleteMessageById(chatId,jwt));
+	public ResponseEntity<Object> deleteMessage(@PathVariable Integer chatId,@RequestHeader("Authorization") String jwt){
+		return ResponseHandler.successResponse(messageService.deleteMessageById(chatId,jwt),HttpStatus.OK);
 	}
 
 	@PutMapping("/chat/{chatId}")
-	public ResponseEntity<MessageResponse> updateMessage(@PathVariable Integer chatId,@RequestBody MessageRequest req,
+	public ResponseEntity<Object> updateMessage(@PathVariable Integer chatId,@RequestBody MessageRequest req,
 															   @RequestHeader("Authorization") String jwt){
-		return ResponseEntity.ok(messageService.updateMessage(chatId,jwt,req));
+		return ResponseHandler.successResponse(messageService.updateMessage(chatId,jwt,req),HttpStatus.OK);
 	}
 
 }

@@ -1,10 +1,7 @@
 package com.roczyno.chatservice.service.impl;
 
-import com.roczyno.chatservice.external.user.UserService;
 import com.roczyno.chatservice.model.Chat;
 import com.roczyno.chatservice.repository.ChatRepository;
-import com.roczyno.chatservice.request.ChatRequest;
-import com.roczyno.chatservice.response.ChatResponse;
 import com.roczyno.chatservice.service.ChatService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

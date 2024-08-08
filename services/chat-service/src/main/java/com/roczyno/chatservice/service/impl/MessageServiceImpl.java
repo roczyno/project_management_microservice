@@ -1,5 +1,6 @@
 package com.roczyno.chatservice.service.impl;
 
+import com.roczyno.chatservice.exception.MessageException;
 import com.roczyno.chatservice.external.user.UserResponse;
 import com.roczyno.chatservice.external.user.UserService;
 import com.roczyno.chatservice.model.Chat;
@@ -48,7 +49,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public MessageResponse findMessageById(Integer id) {
-		Message message=messageRepository.findById(id).orElseThrow();
+		Message message=messageRepository.findById(id).orElseThrow(()-> new MessageException("Message not found"));
 		return mapper.toMessageResponse(message);
 	}
 
@@ -57,7 +58,7 @@ public class MessageServiceImpl implements MessageService {
 		UserResponse user=userService.getUserProfile(jwt);
 		MessageResponse messageResponse=findMessageById(id);
 		if(!user.id().equals(messageResponse.userId())){
-			throw  new RuntimeException();
+			throw  new MessageException("You are not allowed to delete this message");
 		}
 		Message message=mapper.toMessage(messageResponse);
 		messageRepository.delete(message);
@@ -70,7 +71,7 @@ public class MessageServiceImpl implements MessageService {
 		MessageResponse messageResponse=findMessageById(id);
 		Message message=mapper.toMessage(messageResponse);
 		if(!user.id().equals(messageResponse.userId())){
-			throw  new RuntimeException();
+			throw  new MessageException("You are not allowed to update this message");
 		}
 		if(req.content()!=null){
 			message.setContent(req.content());

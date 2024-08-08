@@ -245,3 +245,15 @@ Wservices/issue-service/src/main/java/com/roczyno/issueservice/util/ResponseHand
 [services/issue-service/src/main/java/com/roczyno/issueservice/exception/IssueException.java,f\b\fb67c9418bb517fe8a4c0e6d25f01c24609430cc
 ç
 ]services/issue-service/src/main/java/com/roczyno/issueservice/exception/GlobalExceptions.java,5\2\526dd67b83dd97b833606172414e52fc6d1b150f
+ë
+aservices/invitation-service/src/main/java/com/roczyno/invitationservice/util/ResponseHandler.java,b\8\b842c591af37f5aff867bc9b70cbbeec12afe5ef
+ë
+aservices/comment-service/src/main/java/com/roczyno/commentservice/exception/CommentException.java,3\a\3a84eb520dec777a561215a89c084a8aeb428583
+ë
+aservices/comment-service/src/main/java/com/roczyno/commentservice/exception/GlobalExceptions.java,9\6\96fb08c22a5315b3d1719d33145a4691e61e3f78
+Ö
+Uservices/chat-service/src/main/java/com/roczyno/chatservice/util/ResponseHandler.java,0\8\088a23060bb825a5681bc3d0aac0a8be2c0bb438
+ã
+[services/chat-service/src/main/java/com/roczyno/chatservice/exception/MessageException.java,b\e\bef229912f21b7ff7bedf5b8e2743adbf243e66a
+ã
+[services/chat-service/src/main/java/com/roczyno/chatservice/exception/GlobalExceptions.java,d\0\d0420698b832327fdb22f3e256d81bcec05ec314

@@ -51,9 +51,7 @@ public class InvitationServiceImpl implements InvitationService {
 	public Invitation acceptInvitation(String token, String jwt) {
 		var invitation=invitationRepository.findByToken(token);
 		UserResponse user=userService.getUserProfile(jwt);
-		if(!token.equals(invitation.getToken())){
-			throw new RuntimeException();
-		}
+
 		projectService.addUserToProject(invitation.getProjectId(), jwt);
 		return invitation;
 	}

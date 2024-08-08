@@ -180,10 +180,6 @@ dservices/user-service/src/main/java/com/roczyno/userservice/controller/Authenti
 P
  services/gateway-service/pom.xml,7\8\78d3c263f4499e85af2a49c7d8a9b8c5163a38ec
 ê
-`services/gateway-service/src/main/java/com/roczyno/gatewayservice/exception/GlobalException.java,c\9\c9ac3c2cdf19476260fad1fd566fed8300190c5b
-ç
-]services/gateway-service/src/main/java/com/roczyno/gatewayservice/exception/ErrorDetails.java,5\8\58b106a498e4d5d9ac72754c77c66ac5f80ecdf6
-ê
 `services/gateway-service/src/main/java/com/roczyno/gatewayservice/GatewayServiceApplication.java,6\4\6469a242aa1e61e098ab2a9537ea4a51921a8dab
 k
 ;services/gateway-service/src/main/resources/application.yml,9\5\958531493d50907e5d0e589b259647777745ef4a
@@ -227,3 +223,7 @@ Sservices/chat-service/src/main/java/com/roczyno/chatservice/util/MessageMapper.
 Zservices/chat-service/src/main/java/com/roczyno/chatservice/controller/ChatController.java,d\b\db79a909fc6b61645f360812bfe556f3b5a89d9a
 ç
 ]services/chat-service/src/main/java/com/roczyno/chatservice/controller/MessageController.java,b\f\bffd1b46c2eee642d548cfade4e7622f5f58d8ac
+â
+Yservices/project-service/src/main/java/com/roczyno/projectservice/external/chat/Chat.java,5\e\5ee959c8ea3535a7ce3506e2d93b199c7b29f210
+ê
+`services/project-service/src/main/java/com/roczyno/projectservice/external/chat/ChatService.java,3\8\388130327312a94d34e7c086b447c8b7d6c77f96

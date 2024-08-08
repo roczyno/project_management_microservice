@@ -19,7 +19,7 @@ public class ChatServiceImpl implements ChatService {
 		return chatRepository.save(req);
 	}
 	@Override
-	public ChatResponse getChatByProjectId(Integer projectId) {
+	public Chat getChatByProjectId(Integer projectId) {
 		return chatRepository.findByProjectId(projectId);
 	}
 

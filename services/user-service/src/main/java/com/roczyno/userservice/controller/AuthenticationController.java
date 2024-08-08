@@ -25,7 +25,7 @@ public class AuthenticationController {
 	private final AuthenticationService authenticationService;
 
 	@PostMapping("/register")
-	public ResponseEntity<Object> register(@RequestBody RegistrationRequest req) throws MessagingException {
+	public ResponseEntity<Object> register(@RequestBody RegistrationRequest req) {
 		return ResponseEntity.ok(authenticationService.register(req));
 	}
 	@PostMapping("/login")

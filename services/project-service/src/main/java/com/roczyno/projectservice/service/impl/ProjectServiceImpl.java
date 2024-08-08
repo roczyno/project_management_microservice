@@ -1,5 +1,7 @@
 package com.roczyno.projectservice.service.impl;
 
+import com.roczyno.projectservice.external.chat.Chat;
+import com.roczyno.projectservice.external.chat.ChatService;
 import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.external.user.UserService;
 import com.roczyno.projectservice.model.Project;
@@ -20,9 +22,11 @@ public class ProjectServiceImpl implements ProjectService {
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper mapper;
 	private final UserService userService;
+	private final ChatService chatService;
 
 	@Override
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
+	Chat chat=chatService.createChat(new Chat());
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= Project.builder()
 				.name(req.name())
@@ -31,6 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
 				.category(req.category())
 				.createdAt(LocalDateTime.now())
 				.userId(user.id())
+				.chatId(chat.getId())
 				.build();
 		Project savedProject= projectRepository.save(project);
 		return mapper.mapToProjectResponse(savedProject);

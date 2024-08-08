@@ -1,7 +1,6 @@
 package com.roczyno.chatservice.controller;
 
 import com.roczyno.chatservice.model.Chat;
-import com.roczyno.chatservice.response.ChatResponse;
 import com.roczyno.chatservice.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class ChatController {
 	private final ChatService chatService;
 
 	@GetMapping("/project/{projectId}")
-	public ResponseEntity<ChatResponse> getChat(@PathVariable Integer projectId){
+	public ResponseEntity<Chat> getChat(@PathVariable Integer projectId){
 		return ResponseEntity.ok(chatService.getChatByProjectId(projectId));
 	}
 	@PostMapping

@@ -37,6 +37,7 @@ public class Project {
 	@ElementCollection
 	@Builder.Default
 	private List<Integer> teamMemberIds = new ArrayList<>();
+	private Integer chatId;
 	private LocalDateTime createdAt;
 
 }

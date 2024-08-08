@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChatRepository extends JpaRepository<Chat,Integer> {
 
-	ChatResponse findByProjectId(Integer projectId);
+	Chat findByProjectId(Integer projectId);
 }

@@ -235,3 +235,7 @@ Wservices/user-service/src/main/java/com/roczyno/userservice/exception/ErrorDeta
 Uservices/user-service/src/main/java/com/roczyno/userservice/util/ResponseHandler.java,1\b\1b13968c47f594c1fd9e704202cb2f5771d68f5b
 ˆ
 Xservices/user-service/src/main/java/com/roczyno/userservice/exception/UserException.java,6\c\6c0d5df3c5f24cc9aed9a9833c336bd090b0ea3a
+‘
+aservices/project-service/src/main/java/com/roczyno/projectservice/exception/ProjectException.java,9\6\963d82a44fe71be37526d17eacf84e9b9502c043
+‘
+aservices/project-service/src/main/java/com/roczyno/projectservice/exception/GlobalExceptions.java,e\d\edb64055815fd5b2271e6bcc72bc82ecde9e1716

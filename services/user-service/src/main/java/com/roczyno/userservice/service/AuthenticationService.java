@@ -144,7 +144,7 @@ public class AuthenticationService {
 	}
 
 	@Transactional
-	public void activateAccount(String token) throws MessagingException {
+	public String activateAccount(String token) throws MessagingException {
 		Token savedToken = tokenRepository.findByToken(token).orElseThrow();
 		if (LocalDateTime.now().isAfter(savedToken.getExpiredAt())) {
 			sendValidationEmail(savedToken.getUser());
@@ -155,6 +155,7 @@ public class AuthenticationService {
 		userRepository.save(user);
 		savedToken.setValidatedAt(LocalDateTime.now());
 		tokenRepository.save(savedToken);
+		return "account activated successfully";
 	}
 
 

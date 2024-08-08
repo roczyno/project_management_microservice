@@ -7,8 +7,10 @@ import com.roczyno.userservice.request.PasswordUpdateRequest;
 import com.roczyno.userservice.request.RegistrationRequest;
 import com.roczyno.userservice.response.AuthResponse;
 import com.roczyno.userservice.service.AuthenticationService;
+import com.roczyno.userservice.util.ResponseHandler;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,32 +28,32 @@ public class AuthenticationController {
 
 	@PostMapping("/register")
 	public ResponseEntity<Object> register(@RequestBody RegistrationRequest req) {
-		return ResponseEntity.ok(authenticationService.register(req));
+		return ResponseHandler.successResponse(authenticationService.register(req), HttpStatus.OK);
 	}
 	@PostMapping("/login")
-	public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) {
-		return ResponseEntity.ok(authenticationService.login(req));
+	public ResponseEntity<Object> login(@RequestBody AuthRequest req) {
+		return ResponseHandler.successResponse(authenticationService.login(req),HttpStatus.OK);
 	}
 	@GetMapping("/activate-account")
-	public void confirm(@RequestParam String token) throws MessagingException {
-		authenticationService.activateAccount(token);
+	public ResponseEntity<Object> confirm(@RequestParam String token) throws MessagingException {
+		return ResponseHandler.successResponse(authenticationService.activateAccount(token),HttpStatus.OK);
 	}
 	@PostMapping("/forgot-password")
 	public ResponseEntity<Object> initiateForgotPassword(@RequestBody PasswordResetRequest req) {
-		return ResponseEntity.ok(authenticationService.initiateForgotPassword(req));
+		return ResponseHandler.successResponse(authenticationService.initiateForgotPassword(req),HttpStatus.OK);
 	}
 	@PostMapping("/verify-otp")
 	public ResponseEntity<Object> verifyOtp(@RequestParam int token,@RequestParam String email) {
-		return ResponseEntity.ok(authenticationService.validatePasswordResetToken(token,email));
+		return ResponseHandler.successResponse(authenticationService.validatePasswordResetToken(token,email),HttpStatus.OK);
 	}
 	@PostMapping("/update-password")
 	public ResponseEntity<Object> updatePassword(@RequestBody PasswordUpdateRequest req, @RequestParam String email) {
-		return ResponseEntity.ok(authenticationService.updatePassword(req,email));
+		return ResponseHandler.successResponse(authenticationService.updatePassword(req,email),HttpStatus.OK);
 	}
 
 	@PostMapping ("/change-password")
 	public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordRequest req, Authentication connectedUser){
-		return ResponseEntity.ok(authenticationService.changePassword(req,connectedUser));
+		return ResponseHandler.successResponse(authenticationService.changePassword(req,connectedUser),HttpStatus.OK);
 	}
 
 

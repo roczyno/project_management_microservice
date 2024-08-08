@@ -1,6 +1,7 @@
-package com.roczyno.userservice.exception;
+package com.roczyno.projectservice.exception;
 
-import com.roczyno.userservice.util.ResponseHandler;
+
+import com.roczyno.projectservice.util.ResponseHandler;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.JDBCException;
@@ -15,9 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -33,8 +32,8 @@ public class GlobalExceptions {
 		ErrorDetails errorDetails = new ErrorDetails(errorMessage, "Validation Error", LocalDateTime.now());
 		return ResponseHandler.errorResponse(errorDetails, HttpStatus.BAD_REQUEST);
 	}
-	@ExceptionHandler(UserException.class)
-	public ResponseEntity<Object> handleUserException(UserException ex,WebRequest req){
+	@ExceptionHandler(ProjectException.class)
+	public ResponseEntity<Object> handleProjectException(ProjectException ex,WebRequest req){
 		logException(ex);
 		ErrorDetails err= new ErrorDetails(ex.getMessage(),req.getDescription(false),LocalDateTime.now());
 		return ResponseHandler.errorResponse(err,HttpStatus.BAD_REQUEST);

@@ -1,5 +1,6 @@
 package com.roczyno.projectservice.service.impl;
 
+import com.roczyno.projectservice.exception.ProjectException;
 import com.roczyno.projectservice.external.chat.Chat;
 import com.roczyno.projectservice.external.chat.ChatService;
 import com.roczyno.projectservice.external.user.UserResponse;
@@ -44,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public ProjectResponse getProject(Integer projectId) {
 		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new RuntimeException("project not found"));
+				.orElseThrow(()-> new ProjectException("project not found"));
 		return mapper.mapToProjectResponse(project);
 	}
 
@@ -70,9 +71,9 @@ public class ProjectServiceImpl implements ProjectService {
 	public String deleteProject(Integer projectId, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new RuntimeException("project not found"));
+				.orElseThrow(()-> new ProjectException("project not found"));
 		if(!project.getUserId().equals(user.id())){
-			throw new RuntimeException("Only the owner of the project can delete it");
+			throw new ProjectException("Only the owner of the project can delete it");
 		}
 		projectRepository.delete(project);
 		return "Project deleted successfully";
@@ -82,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new RuntimeException("project not found"));
+				.orElseThrow(()-> new ProjectException("project not found"));
 		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can delete it");
 		}
@@ -107,12 +108,12 @@ public class ProjectServiceImpl implements ProjectService {
 	public String addUserToProject(Integer projectId, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new RuntimeException("project not found"));
+				.orElseThrow(()-> new ProjectException("project not found"));
 		if(!project.getUserId().equals(user.id())){
 			throw new RuntimeException("Only the owner of the project can add a user to it");
 		}
 		if(project.getTeamMemberIds().contains(user.id())){
-			throw new RuntimeException("User already part of team");
+			throw new ProjectException("User already part of team");
 		}
 		project.getTeamMemberIds().add(user.id());
 		return "user added successfully";
@@ -122,12 +123,12 @@ public class ProjectServiceImpl implements ProjectService {
 	public String removeUserFromProject(Integer projectId, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new RuntimeException("project not found"));
+				.orElseThrow(()-> new ProjectException("project not found"));
 		if(!project.getUserId().equals(user.id())){
-			throw new RuntimeException("Only the owner of the project can add a user to it");
+			throw new ProjectException("Only the owner of the project can add a user to it");
 		}
 		if(!project.getTeamMemberIds().contains(user.id())){
-			throw new RuntimeException("User not part of group or already removed form group");
+			throw new ProjectException("User not part of group or already removed form group");
 		}
 		project.getTeamMemberIds().remove(user.id());
 		return "User removed successfully";

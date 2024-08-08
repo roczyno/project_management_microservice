@@ -239,3 +239,9 @@ Xservices/user-service/src/main/java/com/roczyno/userservice/exception/UserExcep
 aservices/project-service/src/main/java/com/roczyno/projectservice/exception/ProjectException.java,9\6\963d82a44fe71be37526d17eacf84e9b9502c043
 ë
 aservices/project-service/src/main/java/com/roczyno/projectservice/exception/GlobalExceptions.java,e\d\edb64055815fd5b2271e6bcc72bc82ecde9e1716
+á
+Wservices/issue-service/src/main/java/com/roczyno/issueservice/util/ResponseHandler.java,c\9\c9b58494ba26029699768f0c3e999d28863d9224
+ã
+[services/issue-service/src/main/java/com/roczyno/issueservice/exception/IssueException.java,f\b\fb67c9418bb517fe8a4c0e6d25f01c24609430cc
+ç
+]services/issue-service/src/main/java/com/roczyno/issueservice/exception/GlobalExceptions.java,5\2\526dd67b83dd97b833606172414e52fc6d1b150f

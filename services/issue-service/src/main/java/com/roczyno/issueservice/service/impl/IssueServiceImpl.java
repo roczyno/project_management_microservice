@@ -1,5 +1,6 @@
 package com.roczyno.issueservice.service.impl;
 
+import com.roczyno.issueservice.exception.IssueException;
 import com.roczyno.issueservice.external.project.ProjectResponse;
 import com.roczyno.issueservice.external.project.ProjectService;
 import com.roczyno.issueservice.external.user.UserResponse;
@@ -45,7 +46,7 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public IssueResponse getIssue(Integer id) {
 		Issue issue= issueRepository.findById(id)
-				.orElseThrow(()-> new RuntimeException("Issue not found"));
+				.orElseThrow(()-> new IssueException("Issue not found"));
 		return mapper.toIssueResponse(issue);
 	}
 
@@ -54,7 +55,7 @@ public class IssueServiceImpl implements IssueService {
 		UserResponse user=userService.getUserProfile(jwt);
 		IssueResponse issueResponse=getIssue(id);
 		if(!issueResponse.assigneeId().equals(user.id())){
-			throw new RuntimeException("Only the owner can delete the issue");
+			throw new IssueException("Only the owner can delete the issue");
 		}
 		Issue issue=mapper.toIssue(issueResponse);
 		issueRepository.delete(issue);

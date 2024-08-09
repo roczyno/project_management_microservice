@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class InvitationProducer {
-	private final KafkaTemplate<String,InvitationConfirmation> kafkaTemplate;
+	private final KafkaTemplate<String, InvitationConfirmation> kafkaTemplate;
 
 	public void sendInviteConfirmation(InvitationConfirmation invitationConfirmation){
-		log.info("Sending Invite confirmation");
+		log.info("Sending Invite confirmation {}", invitationConfirmation);
 		Message<InvitationConfirmation> message= MessageBuilder
 				.withPayload(invitationConfirmation)
 				.setHeader(KafkaHeaders.TOPIC,"invite-topic")

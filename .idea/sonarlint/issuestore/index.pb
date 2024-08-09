@@ -104,8 +104,6 @@ S
 •
 eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationProducer.java,3\5\35e4a7c07f490e0bccb99cc348b8b51d76bb9618
 ™
-iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546
-™
 iservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/InviteConfirmation.java,4\9\49407afd8acfdb3468d4d638aacbbd7bad6ddd90
 ~
 Nservices/issue-service/src/main/java/com/roczyno/issueservice/model/Issue.java,8\6\8670e98c36c84dc6edb45060d1cc90db276ce369
@@ -257,3 +255,11 @@ Uservices/chat-service/src/main/java/com/roczyno/chatservice/util/ResponseHandle
 [services/chat-service/src/main/java/com/roczyno/chatservice/exception/MessageException.java,b\e\bef229912f21b7ff7bedf5b8e2743adbf243e66a
 ‹
 [services/chat-service/src/main/java/com/roczyno/chatservice/exception/GlobalExceptions.java,d\0\d0420698b832327fdb22f3e256d81bcec05ec314
+€
+Pservices/chat-service/src/main/java/com/roczyno/chatservice/util/ChatMapper.java,3\2\32d2fa90c39d3b46e79cf0b349bc66af8ff4f75e
+‘
+aservices/project-service/src/main/java/com/roczyno/projectservice/external/chat/ChatResponse.java,c\6\c6dc05064ed25f7c58770f56aece801b80057e8a
+•
+eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InviteConfirmation.java,6\4\64dd808aaf713092126acb6cb5c803b761cd9b66
+™
+iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546

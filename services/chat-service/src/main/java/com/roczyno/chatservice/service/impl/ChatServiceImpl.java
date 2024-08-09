@@ -2,7 +2,9 @@ package com.roczyno.chatservice.service.impl;
 
 import com.roczyno.chatservice.model.Chat;
 import com.roczyno.chatservice.repository.ChatRepository;
+import com.roczyno.chatservice.response.ChatResponse;
 import com.roczyno.chatservice.service.ChatService;
+import com.roczyno.chatservice.util.ChatMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +12,15 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ChatServiceImpl implements ChatService {
 	private final ChatRepository chatRepository;
+	private final ChatMapper mapper;
 
 	@Override
-	public Chat createChat(Chat req) {
-		return chatRepository.save(req);
+	public ChatResponse createChat(Chat req, Integer projectId) {
+		return mapper.toChatResponse(chatRepository.save(req));
 	}
 	@Override
-	public Chat getChatByProjectId(Integer projectId) {
-		return chatRepository.findByProjectId(projectId);
+	public ChatResponse getChatByProjectId(Integer projectId) {
+		return mapper.toChatResponse(chatRepository.findByProjectId(projectId));
 	}
 
 

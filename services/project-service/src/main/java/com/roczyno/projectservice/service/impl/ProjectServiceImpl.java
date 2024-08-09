@@ -2,6 +2,7 @@ package com.roczyno.projectservice.service.impl;
 
 import com.roczyno.projectservice.exception.ProjectException;
 import com.roczyno.projectservice.external.chat.Chat;
+import com.roczyno.projectservice.external.chat.ChatResponse;
 import com.roczyno.projectservice.external.chat.ChatService;
 import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.external.user.UserService;
@@ -13,6 +14,7 @@ import com.roczyno.projectservice.service.ProjectService;
 import com.roczyno.projectservice.util.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,22 +27,30 @@ public class ProjectServiceImpl implements ProjectService {
 	private final UserService userService;
 	private final ChatService chatService;
 
+	@Transactional
 	@Override
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
-	Chat chat=chatService.createChat(new Chat());
-		UserResponse user=userService.getUserProfile(jwt);
-		Project project= Project.builder()
+		UserResponse user = userService.getUserProfile(jwt);
+		Project project = Project.builder()
 				.name(req.name())
 				.description(req.description())
 				.tags(req.tags())
 				.category(req.category())
 				.createdAt(LocalDateTime.now())
 				.userId(user.id())
-				.chatId(chat.getId())
 				.build();
-		Project savedProject= projectRepository.save(project);
-		return mapper.mapToProjectResponse(savedProject);
+		Project savedProject = projectRepository.save(project);
+
+		Chat chat= new Chat();
+		chat.setCreatedAt(LocalDateTime.now());
+		chat.setProjectId(project.getId());
+
+		ChatResponse projectChat = chatService.createChat(chat, savedProject.getId());
+		savedProject.setChatId(projectChat.id());
+		Project updatedProject = projectRepository.save(savedProject);
+		return mapper.mapToProjectResponse(updatedProject);
 	}
+
 
 	@Override
 	public ProjectResponse getProject(Integer projectId) {

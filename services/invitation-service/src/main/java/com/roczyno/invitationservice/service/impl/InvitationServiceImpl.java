@@ -10,8 +10,11 @@ import com.roczyno.invitationservice.model.Invitation;
 import com.roczyno.invitationservice.repository.InvitationRepository;
 import com.roczyno.invitationservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -22,18 +25,20 @@ public class InvitationServiceImpl implements InvitationService {
 	private final UserService userService;
 	private final InvitationProducer invitationProducer;
 
+
 	@Override
 	public String sendInvitation(String email, Integer projectId,String jwt) {
 		String token= UUID.randomUUID().toString();
 
-		UserResponse user=userService.getUserProfile(jwt);
 		ProjectResponse project=projectService.getProject(projectId);
+		UserResponse user=userService.getUserProfile(jwt);
 		Invitation invitation=Invitation.builder()
 				.email(email)
 				.projectId(projectId)
 				.token(token)
 				.email(email)
 				.senderId(user.id())
+				.createdAt(LocalDateTime.now())
 				.build();
 		invitationRepository.save(invitation);
 

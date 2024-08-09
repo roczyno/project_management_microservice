@@ -2,8 +2,9 @@ package com.roczyno.chatservice.service;
 
 
 import com.roczyno.chatservice.model.Chat;
+import com.roczyno.chatservice.response.ChatResponse;
 
 public interface ChatService {
-	Chat getChatByProjectId(Integer projectId);
-	Chat createChat(Chat req);
+	ChatResponse getChatByProjectId(Integer projectId);
+	ChatResponse createChat(Chat req,Integer projectId);
 }

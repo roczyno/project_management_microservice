@@ -48,23 +48,23 @@ public class NotificationConsumer {
 	}
 
 	@KafkaListener(topics = "invite-topic")
-	public void consumeInviteConfirmationSuccess(InviteConfirmation inviteConfirmation){
-		log.info(format("Consuming the message from invite-topic Topic:: %s",inviteConfirmation));
+	public void consumeInviteConfirmationSuccess(InvitationConfirmation invitationConfirmation){
+		log.info(format("Consuming the message from invite-topic Topic:: %s", invitationConfirmation));
 		notificationRepository.save(
 				Notification.builder()
 						.notificationDate(LocalDateTime.now())
-						.inviteConfirmation(inviteConfirmation)
+						.invitationConfirmation(invitationConfirmation)
 						.notificationType(NotificationType.INVITE_CONFIRMATION)
 						.build()
 		);
 		try {
 			emailService.sendInviteEmail(
-					inviteConfirmation.to(),
-					inviteConfirmation.senderName(),
+					invitationConfirmation.to(),
+					invitationConfirmation.senderName(),
 					EmailTemplate.SEND_INVITE,
-					inviteConfirmation.subject(),
-					inviteConfirmation.projectName(),
-					inviteConfirmation.InvitationUrl()
+					invitationConfirmation.subject(),
+					invitationConfirmation.projectName(),
+					invitationConfirmation.InvitationUrl()
 			);
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

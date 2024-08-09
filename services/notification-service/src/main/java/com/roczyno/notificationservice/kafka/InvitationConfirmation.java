@@ -1,6 +1,6 @@
 package com.roczyno.notificationservice.kafka;
 
-public record InviteConfirmation(
+public record InvitationConfirmation(
 		String to,
 		String senderName,
 		String subject,

@@ -23,8 +23,8 @@ public class ChatController {
 	public ResponseEntity<Object> getChat(@PathVariable Integer projectId){
 		return ResponseHandler.successResponse(chatService.getChatByProjectId(projectId), HttpStatus.OK);
 	}
-	@PostMapping
-	public ResponseEntity<Object> createChat(@RequestBody Chat req){
-		return ResponseHandler.successResponse(chatService.createChat(req),HttpStatus.OK);
+	@PostMapping("/project/{projectId}")
+	public ResponseEntity<Object> createChat(@RequestBody Chat req,@PathVariable Integer projectId){
+		return ResponseHandler.successResponse(chatService.createChat(req,projectId),HttpStatus.OK);
 	}
 }

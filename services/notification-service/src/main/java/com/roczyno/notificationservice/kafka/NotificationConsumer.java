@@ -64,7 +64,7 @@ public class NotificationConsumer {
 					EmailTemplate.SEND_INVITE,
 					invitationConfirmation.subject(),
 					invitationConfirmation.projectName(),
-					invitationConfirmation.InvitationUrl()
+					invitationConfirmation.invitationUrl()
 			);
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

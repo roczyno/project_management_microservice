@@ -103,8 +103,6 @@ S
 #services/invitation-service/pom.xml,e\1\e136b9593b3f13db3c26728205bc4fcdc81277ff
 ï
 eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationProducer.java,3\5\35e4a7c07f490e0bccb99cc348b8b51d76bb9618
-ô
-iservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/InviteConfirmation.java,4\9\49407afd8acfdb3468d4d638aacbbd7bad6ddd90
 ~
 Nservices/issue-service/src/main/java/com/roczyno/issueservice/model/Issue.java,8\6\8670e98c36c84dc6edb45060d1cc90db276ce369
 ç
@@ -259,7 +257,7 @@ Uservices/chat-service/src/main/java/com/roczyno/chatservice/util/ResponseHandle
 Pservices/chat-service/src/main/java/com/roczyno/chatservice/util/ChatMapper.java,3\2\32d2fa90c39d3b46e79cf0b349bc66af8ff4f75e
 ë
 aservices/project-service/src/main/java/com/roczyno/projectservice/external/chat/ChatResponse.java,c\6\c6dc05064ed25f7c58770f56aece801b80057e8a
-ï
-eservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InviteConfirmation.java,6\4\64dd808aaf713092126acb6cb5c803b761cd9b66
 ô
 iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546
+ù
+mservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/InvitationConfirmation.java,1\f\1f6fea5709ad411711785457e357c475c2beb6d8

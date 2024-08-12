@@ -2,9 +2,7 @@ package com.roczyno.projectservice.controller;
 
 import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.service.ProjectService;
-import com.roczyno.projectservice.util.ResponseHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,44 +23,44 @@ public class ProjectController {
 
 	@PostMapping("/create")
 	public ResponseEntity<Object> addProject(@RequestBody ProjectRequest req, @RequestHeader("Authorization") String jwt) {
-		return ResponseHandler.successResponse(projectService.createProject(req,jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.createProject(req,jwt));
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<Object>getProject(@PathVariable Integer id){
-		return ResponseHandler.successResponse(projectService.getProject(id),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.getProject(id));
 	}
 	@GetMapping("/all")
 	public ResponseEntity<Object> getAllProjects(@RequestHeader("Authorization") String jwt
 			, @RequestParam(required = false) String category, @RequestParam(required = false) String tag){
-		return ResponseHandler.successResponse(projectService.getProjectByTeam(jwt,category,tag),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.getProjectByTeam(jwt,category,tag));
 	}
 	@PutMapping("/{projectId}")
 	public ResponseEntity<Object> updateProject(@PathVariable Integer projectId,
 												@RequestBody ProjectRequest projectRequest,
 												@RequestHeader("Authorization") String jwt) {
 
-		return ResponseHandler.successResponse(projectService.updateProject(projectId,projectRequest,jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.updateProject(projectId,projectRequest,jwt));
 	}
 	@DeleteMapping("/{projectId}")
 	public ResponseEntity<Object> deleteProject(@PathVariable Integer projectId,
 												@RequestHeader("Authorization") String jwt){
-		return ResponseHandler.successResponse(projectService.deleteProject(projectId,jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.deleteProject(projectId,jwt));
 	}
 
 	@PostMapping("/add/{projectId}")
 	public ResponseEntity<Object> addUserToProject(@PathVariable Integer projectId,
 												   @RequestHeader("Authorization") String jwt){
-		return ResponseHandler.successResponse(projectService.addUserToProject(projectId, jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.addUserToProject(projectId, jwt));
 	}
 	@PostMapping("/remove/{projectId}")
 	public ResponseEntity<Object> removeUserFromProject(@PathVariable Integer projectId,
 														@RequestHeader("Authorization") String jwt)
 	{
-		return ResponseHandler.successResponse(projectService.removeUserFromProject(projectId,jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.removeUserFromProject(projectId,jwt));
 	}
 	@GetMapping("/search")
 	public ResponseEntity<Object> searchProject(@RequestParam(required = false) String tag,
 												@RequestHeader("Authorization") String jwt) {
-		return ResponseHandler.successResponse(projectService.searchProject(tag,jwt),HttpStatus.OK);
+		return  ResponseEntity.ok(projectService.searchProject(tag,jwt));
 	}
 }

@@ -1,6 +1,7 @@
 package com.roczyno.projectservice.external.chat;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,4 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ChatService {
 	@PostMapping("/api/v1/chat/project/{projectId}")
 	ChatResponse createChat(@RequestBody Chat req, @PathVariable Integer projectId);
+	@PostMapping("/api/v1/project/{projectId}/user/{userId}")
+	ChatResponse addUserToChat(@PathVariable Integer projectId, @PathVariable Integer userId);
 }

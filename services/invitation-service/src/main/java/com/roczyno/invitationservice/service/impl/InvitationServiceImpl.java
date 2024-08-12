@@ -10,6 +10,7 @@ import com.roczyno.invitationservice.model.Invitation;
 import com.roczyno.invitationservice.repository.InvitationRepository;
 import com.roczyno.invitationservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InvitationServiceImpl implements InvitationService {
 	private final InvitationRepository invitationRepository;
 	private final ProjectService projectService;
@@ -29,9 +31,13 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public String sendInvitation(String email, Integer projectId,String jwt) {
 		String token= UUID.randomUUID().toString();
-
-		ProjectResponse project=projectService.getProject(projectId);
 		UserResponse user=userService.getUserProfile(jwt);
+		ProjectResponse project=projectService.getProject(projectId);
+
+		log.info("this is project {}",project);
+		if(project == null){
+			throw  new IllegalStateException("Project is null");
+		}
 		Invitation invitation=Invitation.builder()
 				.email(email)
 				.projectId(projectId)

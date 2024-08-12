@@ -27,4 +27,8 @@ public class ChatController {
 	public ResponseEntity<Object> createChat(@RequestBody Chat req,@PathVariable Integer projectId){
 		return ResponseHandler.successResponse(chatService.createChat(req,projectId),HttpStatus.OK);
 	}
+	@PostMapping("/project/{projectId}/user/{userId}")
+	public ResponseEntity<Object> addUserToChat(@PathVariable Integer projectId,@PathVariable Integer userId){
+		return ResponseHandler.successResponse(chatService.addUserToChat(projectId,userId),HttpStatus.OK);
+	}
 }

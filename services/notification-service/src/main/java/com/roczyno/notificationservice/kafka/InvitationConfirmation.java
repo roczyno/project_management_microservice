@@ -5,6 +5,6 @@ public record InvitationConfirmation(
 		String senderName,
 		String subject,
 		String projectName,
-		String InvitationUrl
+		String invitationUrl
 ) {
 }

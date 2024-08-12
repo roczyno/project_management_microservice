@@ -2,6 +2,7 @@ package com.roczyno.projectservice.exception;
 
 
 import com.roczyno.projectservice.util.ResponseHandler;
+import feign.FeignException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.JDBCException;
@@ -54,6 +55,18 @@ public class GlobalExceptions {
 				.map(error -> new ErrorDetails(error.getDefaultMessage(), error.getField(), LocalDateTime.now()))
 				.toList();
 		return ResponseHandler.errorResponse(errors, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(FeignException.class)
+	public ResponseEntity<Object> handleFeignStatusException(FeignException ex, WebRequest req) {
+		logException(ex);
+
+		HttpStatus status = HttpStatus.resolve(ex.status());  // Convert Feign status to HttpStatus
+		if (status == null) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;  // Default to 500 if status code is not recognized
+		}
+
+		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), req.getDescription(false), LocalDateTime.now());
+		return ResponseHandler.errorResponse(errorDetails, status);
 	}
 
 	@ExceptionHandler(Exception.class)

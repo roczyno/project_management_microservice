@@ -115,6 +115,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Transactional
 	public String addUserToProject(Integer projectId, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
@@ -126,6 +127,7 @@ public class ProjectServiceImpl implements ProjectService {
 			throw new ProjectException("User already part of team");
 		}
 		project.getTeamMemberIds().add(user.id());
+		chatService.addUserToChat(projectId,user.id());
 		return "user added successfully";
 	}
 

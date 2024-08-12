@@ -18,6 +18,17 @@ public class ChatServiceImpl implements ChatService {
 	public ChatResponse createChat(Chat req, Integer projectId) {
 		return mapper.toChatResponse(chatRepository.save(req));
 	}
+
+	@Override
+	public ChatResponse addUserToChat(Integer projectId, Integer userId) {
+		ChatResponse chat=getChatByProjectId(projectId);
+		if(chat.teamMemberIds().contains(userId)){
+			throw new IllegalArgumentException();
+		}
+		   chat.teamMemberIds().add(userId);
+		return chat;
+	}
+
 	@Override
 	public ChatResponse getChatByProjectId(Integer projectId) {
 		return mapper.toChatResponse(chatRepository.findByProjectId(projectId));

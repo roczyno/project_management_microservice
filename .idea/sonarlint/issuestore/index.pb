@@ -261,3 +261,5 @@ aservices/project-service/src/main/java/com/roczyno/projectservice/external/chat
 iservices/invitation-service/src/main/java/com/roczyno/invitationservice/kafka/InvitationConfirmation.java,5\f\5f8e58690365011ce437772a41d06927cf55f546
 ù
 mservices/notification-service/src/main/java/com/roczyno/notificationservice/kafka/InvitationConfirmation.java,1\f\1f6fea5709ad411711785457e357c475c2beb6d8
+{
+Kservices/user-service/src/main/java/com/roczyno/userservice/model/Role.java,1\9\19271500cc50c104d20fc2c5703f7c19a84566ae

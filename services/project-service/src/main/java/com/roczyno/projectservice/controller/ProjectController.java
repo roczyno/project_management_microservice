@@ -1,5 +1,6 @@
 package com.roczyno.projectservice.controller;
 
+import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/project")
@@ -58,9 +61,15 @@ public class ProjectController {
 	{
 		return  ResponseEntity.ok(projectService.removeUserFromProject(projectId,jwt));
 	}
+
+	@GetMapping("/team/{projectId}")
+	public ResponseEntity<List<UserResponse>> getProjectTeam(@PathVariable Integer projectId){
+		return ResponseEntity.ok(projectService.findProjectTeamByProjectId(projectId));
+	}
 	@GetMapping("/search")
 	public ResponseEntity<Object> searchProject(@RequestParam(required = false) String tag,
 												@RequestHeader("Authorization") String jwt) {
 		return  ResponseEntity.ok(projectService.searchProject(tag,jwt));
 	}
+
 }

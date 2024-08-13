@@ -30,8 +30,10 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	@Override
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
+
 		UserResponse user = userService.getUserProfile(jwt);
-		Project project = Project.builder()
+
+		Project newProject = Project.builder()
 				.name(req.name())
 				.description(req.description())
 				.tags(req.tags())
@@ -39,16 +41,22 @@ public class ProjectServiceImpl implements ProjectService {
 				.createdAt(LocalDateTime.now())
 				.userId(user.id())
 				.build();
-		Project savedProject = projectRepository.save(project);
 
-		Chat chat= new Chat();
+
+		Project savedProject = projectRepository.save(newProject);
+		savedProject.getTeamMemberIds().add(user.id());
+		Project projectWithUser = projectRepository.save(savedProject);
+
+
+		Chat chat = new Chat();
 		chat.setCreatedAt(LocalDateTime.now());
-		chat.setProjectId(project.getId());
+		chat.setProjectId(projectWithUser.getId());
+		ChatResponse projectChat = chatService.createChat(chat, projectWithUser.getId());
 
-		ChatResponse projectChat = chatService.createChat(chat, savedProject.getId());
-		savedProject.setChatId(projectChat.id());
-		Project updatedProject = projectRepository.save(savedProject);
-		return mapper.mapToProjectResponse(updatedProject);
+		projectWithUser.setChatId(projectChat.id());
+		Project finalProject = projectRepository.save(projectWithUser);
+
+		return mapper.mapToProjectResponse(finalProject);
 	}
 
 
@@ -120,10 +128,8 @@ public class ProjectServiceImpl implements ProjectService {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)
 				.orElseThrow(()-> new ProjectException("project not found"));
-		if(!project.getUserId().equals(user.id())){
-			throw new RuntimeException("Only the owner of the project can add a user to it");
-		}
-		if(project.getTeamMemberIds().contains(user.id())){
+
+		if(project.getTeamMemberIds().contains(user.id()) || project.getUserId().equals(user.id())){
 			throw new ProjectException("User already part of team");
 		}
 		project.getTeamMemberIds().add(user.id());
@@ -149,5 +155,11 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<ProjectResponse> searchProject(String keyword, String jwt) {
 		return List.of();
+	}
+
+	@Override
+	public List<UserResponse> findProjectTeamByProjectId(Integer projectId) {
+		List<Integer> teamIds=projectRepository.findTeamMemberIdsByProjectId(projectId);
+		return userService.findAllUsersByIds(teamIds);
 	}
 }

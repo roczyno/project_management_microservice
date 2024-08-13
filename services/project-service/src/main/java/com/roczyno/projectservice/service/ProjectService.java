@@ -1,5 +1,6 @@
 package com.roczyno.projectservice.service;
 
+import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.response.ProjectResponse;
 
@@ -21,4 +22,7 @@ public interface ProjectService {
 	String removeUserFromProject(Integer projectId, String jwt);
 
 	List<ProjectResponse> searchProject(String keyword,String jwt);
+
+	List<UserResponse> findProjectTeamByProjectId(Integer projectId);
+
 }

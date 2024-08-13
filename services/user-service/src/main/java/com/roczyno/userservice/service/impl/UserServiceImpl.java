@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,5 +27,13 @@ public class UserServiceImpl implements UserService {
 	public UserResponse findUserById(Integer userId) {
 		User user= userRepository.findById(userId).orElseThrow(()->new UserException("User not found"));
 		return mapper.mapToUserResponse(user);
+	}
+
+	@Override
+	public List<UserResponse> findAllUsersByIds(List<Integer> userIds) {
+		List<User> users= userRepository.findByIdIsIn(userIds);
+		return users.stream()
+				.map(mapper::mapToUserResponse)
+				.toList();
 	}
 }

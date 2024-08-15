@@ -13,6 +13,7 @@ import com.roczyno.projectservice.response.ProjectResponse;
 import com.roczyno.projectservice.service.ProjectService;
 import com.roczyno.projectservice.util.ProjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectServiceImpl implements ProjectService {
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper mapper;
@@ -158,8 +160,9 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<UserResponse> findProjectTeamByProjectId(Integer projectId) {
+	public List<UserResponse> findProjectTeamByProjectId(Integer projectId,String jwt) {
 		List<Integer> teamIds=projectRepository.findTeamMemberIdsByProjectId(projectId);
-		return userService.findAllUsersByIds(teamIds);
+		log.info("this is the userId {}",teamIds.getClass());
+		return userService.findAllUsersByIds(teamIds,jwt);
 	}
 }

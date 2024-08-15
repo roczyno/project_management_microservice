@@ -71,12 +71,13 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public IssueResponse addUserToIssue(Integer userId, Integer issueId) {
+	public IssueResponse addUserToIssue(Integer userId, Integer issueId,String jwt) {
 		Issue issue=issueRepository.findById(issueId).orElseThrow();
 		issue.setAssigneeId(userId);
 		Issue savedIssue=issueRepository.save(issue);
+		UserResponse user=userService.getUserById(userId, jwt);
 		ProjectResponse project=projectService.getProject(savedIssue.getProjectId());
-		UserResponse user=userService.getUserById(userId);
+
 		//send email notification
 		issueProducer.sendIssueConfirmation(new IssueConfirmation(
 				savedIssue.getId(),

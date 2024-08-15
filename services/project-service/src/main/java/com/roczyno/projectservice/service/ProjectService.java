@@ -23,6 +23,6 @@ public interface ProjectService {
 
 	List<ProjectResponse> searchProject(String keyword,String jwt);
 
-	List<UserResponse> findProjectTeamByProjectId(Integer projectId);
+	List<UserResponse> findProjectTeamByProjectId(Integer projectId,String jwt);
 
 }

@@ -10,5 +10,5 @@ public interface UserService {
 	@GetMapping("/api/v1/user/profile")
 	UserResponse getUserProfile(@RequestHeader("Authorization") String jwt);
 	@GetMapping("/api/v1/user/{userId}")
-	UserResponse getUserById(@PathVariable Integer userId);
+	UserResponse getUserById(@PathVariable Integer userId,@RequestHeader("Authorization") String jwt);
 }

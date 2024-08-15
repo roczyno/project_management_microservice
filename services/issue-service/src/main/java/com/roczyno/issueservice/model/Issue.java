@@ -1,6 +1,8 @@
 package com.roczyno.issueservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.roczyno.issueservice.enums.IssuePriority;
+import com.roczyno.issueservice.enums.IssueStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;

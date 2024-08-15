@@ -63,8 +63,8 @@ public class ProjectController {
 	}
 
 	@GetMapping("/team/{projectId}")
-	public ResponseEntity<List<UserResponse>> getProjectTeam(@PathVariable Integer projectId){
-		return ResponseEntity.ok(projectService.findProjectTeamByProjectId(projectId));
+	public ResponseEntity<List<UserResponse>> getProjectTeam(@PathVariable Integer projectId,@RequestHeader("Authorization") String jwt){
+		return ResponseEntity.ok(projectService.findProjectTeamByProjectId(projectId,jwt));
 	}
 	@GetMapping("/search")
 	public ResponseEntity<Object> searchProject(@RequestParam(required = false) String tag,

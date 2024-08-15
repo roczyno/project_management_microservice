@@ -11,7 +11,7 @@ public interface IssueService {
 	IssueResponse getIssue(Integer id);
 	String deleteIssue(Integer id, String jwt);
 	List<IssueResponse> getIssuesByProjectId(Integer projectId);
-	IssueResponse addUserToIssue(Integer userId, Integer issueId);
+	IssueResponse addUserToIssue(Integer userId, Integer issueId,String jwt);
 	IssueResponse updateIssueStatus(Integer issueId,String status);
 	IssueResponse updateIssue(Integer IssueId,IssueRequest req);
 }

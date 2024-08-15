@@ -41,8 +41,9 @@ public class IssueController {
 		return ResponseHandler.successResponse(issueService.getIssue(id),HttpStatus.OK);
 	}
 	@PostMapping("/{issueId}/user/{userId}")
-	public ResponseEntity<Object> addUserToIssue(@PathVariable Integer issueId,@PathVariable Integer userId){
-		return ResponseHandler.successResponse(issueService.addUserToIssue(userId,issueId),HttpStatus.OK);
+	public ResponseEntity<Object> addUserToIssue(@PathVariable Integer issueId,@PathVariable Integer userId,
+												 @RequestHeader("Authorization") String jwt){
+		return ResponseHandler.successResponse(issueService.addUserToIssue(userId,issueId,jwt),HttpStatus.OK);
 	}
 	@PutMapping("/status/{issueId}")
 	public ResponseEntity<Object> updateIssueStatus(@RequestParam String status,@PathVariable Integer issueId){

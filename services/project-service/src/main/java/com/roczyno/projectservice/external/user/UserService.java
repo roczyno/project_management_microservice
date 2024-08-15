@@ -13,5 +13,5 @@ public interface UserService {
 	@GetMapping("/api/v1/user/profile")
 	UserResponse getUserProfile(@RequestHeader("Authorization") String jwt);
 	@PostMapping("/api/v1/user/find-by-ids")
-	List<UserResponse> findAllUsersByIds(@RequestBody List<Integer> userIds);
+	List<UserResponse> findAllUsersByIds(@RequestBody List<Integer> userIds,@RequestHeader("Authorization") String jwt);
 }

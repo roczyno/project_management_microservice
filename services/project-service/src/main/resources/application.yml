@@ -11,17 +11,53 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-
-
+        include: health
   endpoint:
     health:
       show-details: always
 
-  info:
-    env:
+  health:
+    circuitbreakers:
       enabled: true
 
-info:
-  app:
-    name: roczyno
+
+
+#Resilience4J
+resilience4j:
+  circuitbreaker:
+    instances:
+      userBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
+
+      chatBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
+  retry:
+    instances:
+      chatBreaker:
+        max-attempts: 5
+        wait-duration: 10s
+
+  ratelimiter:
+    instances:
+      chatBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2
+
+
+
+

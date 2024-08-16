@@ -12,12 +12,16 @@ import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.response.ProjectResponse;
 import com.roczyno.projectservice.service.ProjectService;
 import com.roczyno.projectservice.util.ProjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,10 +35,11 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Transactional
 	@Override
+	@CircuitBreaker(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
+	@Retry(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
+	@RateLimiter(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
-
 		UserResponse user = userService.getUserProfile(jwt);
-
 		Project newProject = Project.builder()
 				.name(req.name())
 				.description(req.description())
@@ -43,12 +48,9 @@ public class ProjectServiceImpl implements ProjectService {
 				.createdAt(LocalDateTime.now())
 				.userId(user.id())
 				.build();
-
-
 		Project savedProject = projectRepository.save(newProject);
 		savedProject.getTeamMemberIds().add(user.id());
 		Project projectWithUser = projectRepository.save(savedProject);
-
 
 		Chat chat = new Chat();
 		chat.setCreatedAt(LocalDateTime.now());
@@ -61,6 +63,13 @@ public class ProjectServiceImpl implements ProjectService {
 		return mapper.mapToProjectResponse(finalProject);
 	}
 
+	public List<String> chatBreakerFallBack(Exception e) {
+		log.error("Chat service failed: {}", e.getMessage(), e);
+		List<String> list = new ArrayList<>();
+		list.add("Chat Service not available");
+		return list;
+	}
+
 
 	@Override
 	public ProjectResponse getProject(Integer projectId) {
@@ -70,6 +79,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@CircuitBreaker(name = "userBreaker")
 	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
 		UserResponse user=userService.getUserProfile(jwt);
 		List<Project> projects=projectRepository.findByTeamOrOwner(user.id(),user.id());
@@ -126,6 +136,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional
+	@CircuitBreaker(name = "userBreaker")
 	public String addUserToProject(Integer projectId, String jwt) {
 		UserResponse user=userService.getUserProfile(jwt);
 		Project project= projectRepository.findById(projectId)

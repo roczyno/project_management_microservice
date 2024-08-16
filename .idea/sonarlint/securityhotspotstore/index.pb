@@ -278,3 +278,7 @@ Tservices/issue-service/src/main/java/com/roczyno/issueservice/enums/IssueStatus
 Vservices/issue-service/src/main/java/com/roczyno/issueservice/enums/IssuePriority.java,f\5\f5215ae698690e67af81fd9e6fdfc07eec76fcfb
 Ü
 Vservices/user-service/src/main/java/com/roczyno/userservice/config/SecurityConfig.java,7\4\745e6501db7f1dc6bba69ad4decf75a711f737a1
+ç
+]services/project-service/src/main/java/com/roczyno/projectservice/exception/ErrorDetails.java,5\9\5938bc3f90b99f73233d53021781846fa819ac56
+U
+%services/notification-service/pom.xml,8\7\87a714d8d025e772605245d3b5fdeed20d187fb6

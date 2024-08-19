@@ -298,3 +298,13 @@ uservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/ser
 pservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/util/SubscriptionResponseMapper.java,6\3\63e38345a9596f696d6f2f26d0a980d6306109e0
 ¢
 rservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/controller/SubscriptionController.java,6\e\6e47e7551a78f01d532ae0534b2420013cef694e
+y
+Iservices/user-service/src/main/java/com/roczyno/userservice/External.java,d\4\d4b4ecc54346a7e459863b3bc01805478d989994
+õ
+kservices/user-service/src/main/java/com/roczyno/userservice/external/subscription/SubscriptionResponse.java,5\4\5446d29227b2f5f0b255c6388210d281d10075ca
+è
+_services/user-service/src/main/java/com/roczyno/userservice/external/subscription/PlanType.java,c\7\c73c5c4ed30a2dbd7d3a3cb1b0342bd38357d2d9
+ö
+jservices/user-service/src/main/java/com/roczyno/userservice/external/subscription/SubscriptionService.java,a\9\a99f89d107b0a9fd40bc373d9ebc6fe6b6d68cf3
+U
+%services/subscription-service/pom.xml,d\3\d3fc208fae5c2885ae1c04338140e15b4a2f36bf

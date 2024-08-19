@@ -10,6 +10,7 @@
         <module name="config-server" />
         <module name="issue-service" />
         <module name="comment-service" />
+        <module name="subscription-service" />
         <module name="invitation-service" />
         <module name="gateway-service" />
         <module name="chat-service" />
@@ -35,6 +36,7 @@
       <module name="issue-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="project-service" options="-parameters" />
+      <module name="subscription-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

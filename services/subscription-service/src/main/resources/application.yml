@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: subscription-service
+
+server:
+  port: 8088

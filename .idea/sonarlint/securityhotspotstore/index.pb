@@ -326,3 +326,9 @@ gservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/req
 jservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/config/RestTemplateConfig.java,6\a\6a2846871c5b8caf7862cd60307adaefa758c7ca
 ¡
 qservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/request/VerifyTransactionRequest.java,2\a\2a0e4a332bf00072618715c7c4891b24b289982f
+‡
+Wservices/chat-service/src/main/java/com/roczyno/chatservice/config/WebSocketConfig.java,a\9\a97c1e5757f7e57986c7681a6bd98cd6515bc28a
+ˆ
+Xservices/chat-service/src/main/java/com/roczyno/chatservice/controller/RealTimeChat.java,9\5\95f4553da4860eac9cc40b41bd09715807f2b5b6
+‹
+[services/chat-service/src/main/java/com/roczyno/chatservice/request/SendMessageRequest.java,a\7\a73ca3cc3889cf49f88825acbb4126abfab59c59

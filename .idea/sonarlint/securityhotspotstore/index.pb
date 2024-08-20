@@ -314,3 +314,15 @@ pservices/project-service/src/main/java/com/roczyno/projectservice/external/subs
 eservices/project-service/src/main/java/com/roczyno/projectservice/external/subscription/PlanType.java,6\a\6ab5c505157b53af50227abd13c5efee0a47597a
 š
 jservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/external/user/UserService.java,b\7\b774e294a0b1089c4500413f61780bd46afc040c
+Ÿ
+oservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/SubscriptionServiceApplication.java,0\7\0743e71c66273886313d5808aa011ac5428e3c98
+™
+iservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/response/PaymentResponse.java,2\3\23008e0fa55de7cb539960c7cb59fcb2df2f47fc
+—
+gservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/service/PaymentService.java,2\f\2f3a471b825a1b46f9fb3ee62a7694a1918ca992
+—
+gservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/request/PaymentRequest.java,6\a\6ae6b00718576f36655626a2159fb844802e574c
+š
+jservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/config/RestTemplateConfig.java,6\a\6a2846871c5b8caf7862cd60307adaefa758c7ca
+¡
+qservices/subscription-service/src/main/java/com/roczyno/subscriptionservice/request/VerifyTransactionRequest.java,2\a\2a0e4a332bf00072618715c7c4891b24b289982f

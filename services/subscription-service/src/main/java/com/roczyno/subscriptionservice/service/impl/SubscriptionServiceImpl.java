@@ -1,5 +1,6 @@
 package com.roczyno.subscriptionservice.service.impl;
 
+import com.roczyno.subscriptionservice.external.user.UserService;
 import com.roczyno.subscriptionservice.model.PlanType;
 import com.roczyno.subscriptionservice.model.Subscription;
 import com.roczyno.subscriptionservice.repository.SubscriptionRepository;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class SubscriptionServiceImpl implements SubscriptionService {
 	private final SubscriptionRepository subscriptionRepository;
 	private final SubscriptionResponseMapper mapper;
+	private final UserService userService;
 
 	private static final int BASIC_PLAN_DAYS = 12;
 	private static final int STANDARD_PLAN_DAYS = 30;
@@ -62,6 +64,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		};
 		subscription.setSubscriptionEndDate(LocalDateTime.now().plusDays(duration));
 		var upgradedSubscription=subscriptionRepository.save(subscription);
+		userService.decreaseUserProjectSize(userId);
 		return mapper.toSubscriptionResponse(upgradedSubscription);
 	}
 

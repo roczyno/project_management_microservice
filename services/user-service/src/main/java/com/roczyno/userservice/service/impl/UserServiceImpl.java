@@ -36,4 +36,20 @@ public class UserServiceImpl implements UserService {
 				.map(mapper::mapToUserResponse)
 				.toList();
 	}
+
+	@Override
+	public String increaseUserProjectSize(Integer userId) {
+		User user=mapper.mapToUser(findUserById(userId));
+		user.setProjectSize(user.getProjectSize()+1);
+		userRepository.save(user);
+		return "successful";
+	}
+
+	@Override
+	public String decreaseUserProjectSize(Integer userId) {
+		User user=mapper.mapToUser(findUserById(userId));
+		user.setProjectSize(0);
+		userRepository.save(user);
+		return "successful";
+	}
 }

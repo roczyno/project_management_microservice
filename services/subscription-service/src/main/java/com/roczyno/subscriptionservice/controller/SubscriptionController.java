@@ -23,13 +23,13 @@ public class SubscriptionController {
 		return ResponseEntity.ok(subscriptionService.createSubscription(userId));
 	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<Object> getUserSubscription(@PathVariable Integer userId) {
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<SubscriptionResponse> getUserSubscription(@PathVariable Integer userId) {
 		return ResponseEntity.ok(subscriptionService.getUserSubscription(userId));
 	}
 
 	@PutMapping("/{userId}/upgrade")
-	public ResponseEntity<Object> upgradeSubscription(@PathVariable Integer userId, @RequestParam PlanType planType) {
+	public ResponseEntity<SubscriptionResponse> upgradeSubscription(@PathVariable Integer userId, @RequestParam PlanType planType) {
 		return ResponseEntity.ok(subscriptionService.upgradeSubscription(userId, planType));
 	}
 

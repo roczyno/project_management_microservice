@@ -15,4 +15,14 @@ public class UserMapper {
 				user.getCreatedAt()
 		);
 	}
+
+	public User mapToUser(UserResponse userResponse) {
+		return User.builder()
+				.id(userResponse.id())
+				.username(userResponse.username())
+				.email(userResponse.email())
+				.projectSize(userResponse.projectSize())
+				.createdAt(userResponse.createdAt())
+				.build();
+	}
 }

@@ -4,6 +4,9 @@ import com.roczyno.projectservice.exception.ProjectException;
 import com.roczyno.projectservice.external.chat.Chat;
 import com.roczyno.projectservice.external.chat.ChatResponse;
 import com.roczyno.projectservice.external.chat.ChatService;
+import com.roczyno.projectservice.external.subscription.PlanType;
+import com.roczyno.projectservice.external.subscription.SubscriptionResponse;
+import com.roczyno.projectservice.external.subscription.SubscriptionService;
 import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.external.user.UserService;
 import com.roczyno.projectservice.model.Project;
@@ -32,6 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private final ProjectMapper mapper;
 	private final UserService userService;
 	private final ChatService chatService;
+	private final SubscriptionService subscriptionService;
 
 	@Transactional
 	@Override
@@ -40,6 +44,14 @@ public class ProjectServiceImpl implements ProjectService {
 	@RateLimiter(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
 		UserResponse user = userService.getUserProfile(jwt);
+		SubscriptionResponse userSubscription=subscriptionService.getUserSubscription(user.id());
+		if(userSubscription.planType()== PlanType.FREE && user.projectSize()>2){
+			throw new ProjectException("Users on a free plan can only create two projects");
+		}
+		else if(userSubscription.planType()== PlanType.MONTHLY && user.projectSize()>10){
+			throw new ProjectException("Users on a monthly plan can only create two projects");
+		}
+
 		Project newProject = Project.builder()
 				.name(req.name())
 				.description(req.description())
@@ -59,7 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 		projectWithUser.setChatId(projectChat.id());
 		Project finalProject = projectRepository.save(projectWithUser);
-
+		userService.increaseUserProjectSize(user.id());
 		return mapper.mapToProjectResponse(finalProject);
 	}
 

@@ -2,7 +2,9 @@ package com.roczyno.projectservice.external.user;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -14,4 +16,6 @@ public interface UserService {
 	UserResponse getUserProfile(@RequestHeader("Authorization") String jwt);
 	@PostMapping("/api/v1/user/find-by-ids")
 	List<UserResponse> findAllUsersByIds(@RequestBody List<Integer> userIds,@RequestHeader("Authorization") String jwt);
+	@PutMapping("/api/v1/user/increase/project-size/{userId}")
+	String increaseUserProjectSize(@PathVariable Integer userId);
 }

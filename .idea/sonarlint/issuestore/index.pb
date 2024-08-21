@@ -332,3 +332,5 @@ Wservices/chat-service/src/main/java/com/roczyno/chatservice/config/WebSocketCon
 Xservices/chat-service/src/main/java/com/roczyno/chatservice/controller/RealTimeChat.java,9\5\95f4553da4860eac9cc40b41bd09715807f2b5b6
 ‹
 [services/chat-service/src/main/java/com/roczyno/chatservice/request/SendMessageRequest.java,a\7\a73ca3cc3889cf49f88825acbb4126abfab59c59
+ˆ
+Xservices/chat-service/src/main/java/com/roczyno/chatservice/exception/ChatException.java,c\0\c0913238c2b327c9982b838f93a84f763e8bfc60

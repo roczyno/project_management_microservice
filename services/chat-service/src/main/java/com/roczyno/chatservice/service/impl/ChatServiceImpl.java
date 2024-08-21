@@ -1,5 +1,6 @@
 package com.roczyno.chatservice.service.impl;
 
+import com.roczyno.chatservice.exception.ChatException;
 import com.roczyno.chatservice.model.Chat;
 import com.roczyno.chatservice.repository.ChatRepository;
 import com.roczyno.chatservice.response.ChatResponse;
@@ -23,10 +24,21 @@ public class ChatServiceImpl implements ChatService {
 	public ChatResponse addUserToChat(Integer projectId, Integer userId) {
 		ChatResponse chat=getChatByProjectId(projectId);
 		if(chat.teamMemberIds().contains(userId)){
-			throw new IllegalArgumentException();
+			throw new ChatException("User is already part of chat");
 		}
 		   chat.teamMemberIds().add(userId);
 		return chat;
+	}
+
+	@Override
+	public String removeUserFromChat(Integer projectId, Integer userId) {
+		ChatResponse chat=getChatByProjectId(projectId);
+		if(!chat.teamMemberIds().contains(userId)){
+			throw new ChatException("User is not part of chat");
+		}
+		chat.teamMemberIds().remove(userId);
+
+		return "User removed from chat successfully";
 	}
 
 	@Override

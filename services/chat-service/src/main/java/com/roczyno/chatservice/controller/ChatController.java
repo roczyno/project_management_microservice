@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,11 @@ public class ChatController {
 		return ResponseEntity.ok(chatService.createChat(req,projectId));
 	}
 	@PostMapping("/project/{projectId}/user/{userId}")
-	public ResponseEntity<Object> addUserToChat(@PathVariable Integer projectId,@PathVariable Integer userId){
+	public ResponseEntity<ChatResponse> addUserToChat(@PathVariable Integer projectId,@PathVariable Integer userId){
 		return ResponseEntity.ok(chatService.addUserToChat(projectId,userId));
+	}
+	@PutMapping("/remove/project/{projectId}/user/{userId}")
+	public ResponseEntity<String> removeUserFromChat(@PathVariable Integer projectId, @PathVariable Integer userId){
+		return ResponseEntity.ok(chatService.removeUserFromChat(projectId,userId));
 	}
 }

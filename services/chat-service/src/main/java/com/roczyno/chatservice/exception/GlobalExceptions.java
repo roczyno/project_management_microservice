@@ -35,7 +35,13 @@ public class GlobalExceptions {
 		return ResponseHandler.errorResponse(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(MessageException.class)
-	public ResponseEntity<Object> handleProjectException(MessageException ex,WebRequest req){
+	public ResponseEntity<Object> handleMessageException(MessageException ex,WebRequest req){
+		logException(ex);
+		ErrorDetails err= new ErrorDetails(ex.getMessage(),req.getDescription(false),LocalDateTime.now());
+		return ResponseHandler.errorResponse(err,HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(ChatException.class)
+	public ResponseEntity<Object> handleChatException(ChatException ex,WebRequest req){
 		logException(ex);
 		ErrorDetails err= new ErrorDetails(ex.getMessage(),req.getDescription(false),LocalDateTime.now());
 		return ResponseHandler.errorResponse(err,HttpStatus.BAD_REQUEST);

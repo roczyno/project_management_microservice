@@ -176,7 +176,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 
-
 	private Project validateOwnershipAndGetProject(Integer projectId, String jwt) {
 		Project project = mapper.mapToProject(getProject(projectId));
 		UserResponse user = userService.getUserProfile(jwt);

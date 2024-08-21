@@ -6,19 +6,7 @@ spring:
 server:
   port: 8080
 
-#actuator
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-  endpoint:
-    health:
-      show-details: always
 
-  health:
-    circuitbreakers:
-      enabled: true
 
 
 
@@ -50,10 +38,18 @@ resilience4j:
       chatBreaker:
         max-attempts: 5
         wait-duration: 10s
+      userBreaker:
+        max-attempts: 5
+        wait-duration: 10s
+
 
   ratelimiter:
     instances:
       chatBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2
+      userBreaker:
         timeout-duration: 0
         limit-refresh-period: 4
         limit-for-period: 2

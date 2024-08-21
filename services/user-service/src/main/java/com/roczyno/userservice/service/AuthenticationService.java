@@ -18,8 +18,12 @@ import com.roczyno.userservice.request.PasswordResetRequest;
 import com.roczyno.userservice.request.PasswordUpdateRequest;
 import com.roczyno.userservice.request.RegistrationRequest;
 import com.roczyno.userservice.response.AuthResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,12 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
 	private final UserRepository userRepository;
@@ -54,6 +60,9 @@ public class AuthenticationService {
 	private String activationUrl;
 
 	@Transactional
+	@CircuitBreaker(name = "subscriptionBreaker",fallbackMethod = "subscriptionBreakerFallback")
+	@Retry(name = "subscriptionBreaker",fallbackMethod = "subscriptionBreakerFallback")
+	@RateLimiter(name = "subscriptionBreaker",fallbackMethod = "subscriptionBreakerFallback")
 	public String register(RegistrationRequest req)  {
 		User isEmailExist= userRepository.findByEmail(req.email());
 		if(isEmailExist!=null){
@@ -74,7 +83,7 @@ public class AuthenticationService {
 		var savedUser=userRepository.save(user);
 		subscriptionService.createSubscription(savedUser.getId());
 		var newToken = generateAndSaveActivationToken(user);
-//		sendValidationEmail(savedUser);
+
 		userProducer.sendUserConfirmation(new UserConfirmation(
 				savedUser.getEmail(),
 				savedUser.getUsername(),
@@ -84,6 +93,13 @@ public class AuthenticationService {
 
 		));
 		return "user created successfully";
+	}
+
+	public List<String> subscriptionBreakerFallBack(Exception e) {
+		log.error("Chat service failed: {}", e.getMessage(), e);
+		List<String> list = new ArrayList<>();
+		list.add("Chat Service not available");
+		return list;
 	}
 
 
@@ -256,4 +272,7 @@ public class AuthenticationService {
 		userRepository.save(user);
 		return "Password changed successfully";
 	}
+
+
+
 }

@@ -26,11 +26,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectServiceImpl implements ProjectService {
+	private static final String CHAT_BREAKER = "chatBreaker";
+	private static final String USER_BREAKER = "userBreaker";
+
+	private static final String ERROR_PROJECT_NOT_FOUND = "Project not found";
+	private static final String ERROR_ONLY_OWNER_CAN_MODIFY = "Only the owner of the project can modify it";
+	private static final String ERROR_USER_ALREADY_PART_OF_TEAM = "User is already part of the team";
+	private static final String ERROR_USER_NOT_PART_OF_TEAM = "User is not part of the team or already removed";
+	private static final String ERROR_MAX_PROJECTS_REACHED_FREE = "Users on a free plan can only create two projects";
+	private static final String ERROR_MAX_PROJECTS_REACHED_MONTHLY = "Users on a monthly plan can only create ten projects";
+
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper mapper;
 	private final UserService userService;
@@ -39,42 +50,192 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Transactional
 	@Override
-	@CircuitBreaker(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
-	@Retry(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
-	@RateLimiter(name = "chatBreaker",fallbackMethod = "chatBreakerFallBack")
+	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
 		UserResponse user = userService.getUserProfile(jwt);
-		SubscriptionResponse userSubscription=subscriptionService.getUserSubscription(user.id());
-		if(userSubscription.planType()== PlanType.FREE && user.projectSize()>2){
-			throw new ProjectException("Users on a free plan can only create two projects");
+		validateUserProjectLimit(user);
+
+		Project newProject = createAndSaveNewProject(req, user.id());
+		Project projectWithUser = addUserToProjectTeam(newProject, user.id());
+
+		ChatResponse projectChat = createProjectChat(projectWithUser);
+
+		projectWithUser.setChatId(projectChat.id());
+		Project finalProject = projectRepository.save(projectWithUser);
+
+		userService.increaseUserProjectSize(user.id());
+		return mapper.mapToProjectResponse(finalProject);
+	}
+
+
+
+	@Override
+	public ProjectResponse getProject(Integer projectId) {
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(()-> new ProjectException(ERROR_PROJECT_NOT_FOUND));
+		return mapper.mapToProjectResponse(project);
+	}
+
+	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
+		UserResponse user = userService.getUserProfile(jwt);
+		List<Project> projects = projectRepository.findByTeamOrOwner(user.id(), user.id());
+
+		projects = filterProjectsByCategoryAndTag(projects, category, tag);
+
+		return projects.stream()
+				.map(mapper::mapToProjectResponse)
+				.toList();
+	}
+
+	private List<Project> filterProjectsByCategoryAndTag(List<Project> projects, String category, String tag) {
+		if (category != null) {
+			projects = projects.stream()
+					.filter(project -> project.getCategory().equals(category))
+					.toList();
 		}
-		else if(userSubscription.planType()== PlanType.MONTHLY && user.projectSize()>10){
-			throw new ProjectException("Users on a monthly plan can only create two projects");
+		if (tag != null) {
+			projects = projects.stream()
+					.filter(project -> project.getTags().contains(tag))
+					.toList();
+		}
+		return projects;
+	}
+
+	@Override
+	public String deleteProject(Integer projectId, String jwt) {
+		Project project = validateOwnershipAndGetProject(projectId, jwt);
+		projectRepository.delete(project);
+		return "Project deleted successfully";
+	}
+
+	@Override
+	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
+		Project project = validateOwnershipAndGetProject(projectId, jwt);
+		updateProjectDetails(project, req);
+		Project updatedProject = projectRepository.save(project);
+		return mapper.mapToProjectResponse(updatedProject);
+	}
+
+
+	@Transactional
+	@Override
+	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	public String addUserToProject(Integer projectId, String jwt) {
+		Project project = mapper.mapToProject(getProject(projectId));
+		UserResponse user = userService.getUserProfile(jwt);
+
+		if (project.getTeamMemberIds().contains(user.id()) || project.getUserId().equals(user.id())) {
+			throw new ProjectException(ERROR_USER_ALREADY_PART_OF_TEAM);
 		}
 
+		project.getTeamMemberIds().add(user.id());
+		chatService.addUserToChat(projectId, user.id());
+		return "User added successfully";
+	}
+
+	@Override
+	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	public String removeUserFromProject(Integer projectId, String jwt) {
+		Project project = validateOwnershipAndGetProject(projectId, jwt);
+		UserResponse user = userService.getUserProfile(jwt);
+
+		if (!project.getTeamMemberIds().contains(user.id())) {
+			throw new ProjectException(ERROR_USER_NOT_PART_OF_TEAM);
+		}
+
+		project.getTeamMemberIds().remove(user.id());
+		chatService.removeUserFromChat(projectId, user.id());
+		return "User removed successfully";
+	}
+
+	@Override
+	public List<ProjectResponse> searchProject(String keyword, String jwt) {
+		// Placeholder for actual implementation
+		// This could include a repository query or service method for searching projects by keyword
+		return List.of();
+	}
+
+	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	public List<UserResponse> findProjectTeamByProjectId(Integer projectId, String jwt) {
+		List<Integer> teamIds = projectRepository.findTeamMemberIdsByProjectId(projectId);
+		return userService.findAllUsersByIds(teamIds, jwt);
+	}
+
+
+
+
+
+
+	private Project validateOwnershipAndGetProject(Integer projectId, String jwt) {
+		Project project = mapper.mapToProject(getProject(projectId));
+		UserResponse user = userService.getUserProfile(jwt);
+
+		if (!project.getUserId().equals(user.id())) {
+			throw new ProjectException(ERROR_ONLY_OWNER_CAN_MODIFY);
+		}
+
+		return project;
+	}
+
+
+	private void validateUserProjectLimit(UserResponse user) {
+		SubscriptionResponse userSubscription = subscriptionService.getUserSubscription(user.id());
+		if (userSubscription.planType() == PlanType.FREE && user.projectSize() > 2) {
+			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_FREE);
+		} else if (userSubscription.planType() == PlanType.MONTHLY && user.projectSize() > 10) {
+			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_MONTHLY);
+		}
+	}
+
+	private Project createAndSaveNewProject(ProjectRequest req, Integer userId) {
 		Project newProject = Project.builder()
 				.name(req.name())
 				.description(req.description())
 				.tags(req.tags())
 				.category(req.category())
 				.createdAt(LocalDateTime.now())
-				.userId(user.id())
+				.userId(userId)
 				.build();
-		Project savedProject = projectRepository.save(newProject);
-		savedProject.getTeamMemberIds().add(user.id());
-		Project projectWithUser = projectRepository.save(savedProject);
-
-		Chat chat = new Chat();
-		chat.setCreatedAt(LocalDateTime.now());
-		chat.setProjectId(projectWithUser.getId());
-		ChatResponse projectChat = chatService.createChat(chat, projectWithUser.getId());
-
-		projectWithUser.setChatId(projectChat.id());
-		Project finalProject = projectRepository.save(projectWithUser);
-		userService.increaseUserProjectSize(user.id());
-		return mapper.mapToProjectResponse(finalProject);
+		return projectRepository.save(newProject);
 	}
 
+	private Project addUserToProjectTeam(Project project, Integer userId) {
+		project.getTeamMemberIds().add(userId);
+		return projectRepository.save(project);
+	}
+
+	private ChatResponse createProjectChat(Project project) {
+		Chat chat = new Chat();
+		chat.setCreatedAt(LocalDateTime.now());
+		chat.setProjectId(project.getId());
+		return chatService.createChat(chat, project.getId());
+	}
+
+	private void updateProjectDetails(Project project, ProjectRequest req) {
+		Optional.ofNullable(req.name()).ifPresent(project::setName);
+		Optional.ofNullable(req.description()).ifPresent(project::setDescription);
+		Optional.ofNullable(req.tags()).ifPresent(project::setTags);
+		Optional.ofNullable(req.category()).ifPresent(project::setCategory);
+	}
+
+	// Fallback methods
+	public List<String> userBreakerFallBack(Exception e) {
+		log.error("User service failed: {}", e.getMessage(), e);
+		List<String> list = new ArrayList<>();
+		list.add("User Service not available");
+		return list;
+	}
 	public List<String> chatBreakerFallBack(Exception e) {
 		log.error("Chat service failed: {}", e.getMessage(), e);
 		List<String> list = new ArrayList<>();
@@ -83,109 +244,4 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 
-	@Override
-	public ProjectResponse getProject(Integer projectId) {
-		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new ProjectException("project not found"));
-		return mapper.mapToProjectResponse(project);
-	}
-
-	@Override
-	@CircuitBreaker(name = "userBreaker")
-	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
-		UserResponse user=userService.getUserProfile(jwt);
-		List<Project> projects=projectRepository.findByTeamOrOwner(user.id(),user.id());
-		if(category!=null){
-			projects=projects.stream().filter(project -> project.getCategory().equals(category))
-					.toList();
-		}
-		if(tag!=null){
-			projects=projects.stream().filter(project -> project.getTags().contains(tag))
-					.toList();
-		}
-
-		return projects.stream()
-				.map(mapper::mapToProjectResponse)
-				.toList();
-	}
-
-	@Override
-	public String deleteProject(Integer projectId, String jwt) {
-		UserResponse user=userService.getUserProfile(jwt);
-		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new ProjectException("project not found"));
-		if(!project.getUserId().equals(user.id())){
-			throw new ProjectException("Only the owner of the project can delete it");
-		}
-		projectRepository.delete(project);
-		return "Project deleted successfully";
-	}
-
-	@Override
-	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
-		UserResponse user=userService.getUserProfile(jwt);
-		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new ProjectException("project not found"));
-		if(!project.getUserId().equals(user.id())){
-			throw new RuntimeException("Only the owner of the project can delete it");
-		}
-		if(req.name()!=null){
-			project.setName(req.name());
-		}
-		if(req.description()!=null){
-			project.setDescription(req.description());
-		}
-		if(req.tags()!=null){
-			project.setTags(req.tags());
-		}
-		if(req.category()!=null){
-			project.setCategory(req.category());
-		}
-		Project updatedProject= projectRepository.save(project);
-
-		return mapper.mapToProjectResponse(updatedProject);
-	}
-
-	@Override
-	@Transactional
-	@CircuitBreaker(name = "userBreaker")
-	public String addUserToProject(Integer projectId, String jwt) {
-		UserResponse user=userService.getUserProfile(jwt);
-		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new ProjectException("project not found"));
-
-		if(project.getTeamMemberIds().contains(user.id()) || project.getUserId().equals(user.id())){
-			throw new ProjectException("User already part of team");
-		}
-		project.getTeamMemberIds().add(user.id());
-		chatService.addUserToChat(projectId,user.id());
-		return "user added successfully";
-	}
-
-	@Override
-	public String removeUserFromProject(Integer projectId, String jwt) {
-		UserResponse user=userService.getUserProfile(jwt);
-		Project project= projectRepository.findById(projectId)
-				.orElseThrow(()-> new ProjectException("project not found"));
-		if(!project.getUserId().equals(user.id())){
-			throw new ProjectException("Only the owner of the project can add a user to it");
-		}
-		if(!project.getTeamMemberIds().contains(user.id())){
-			throw new ProjectException("User not part of group or already removed form group");
-		}
-		project.getTeamMemberIds().remove(user.id());
-		return "User removed successfully";
-	}
-
-	@Override
-	public List<ProjectResponse> searchProject(String keyword, String jwt) {
-		return List.of();
-	}
-
-	@Override
-	public List<UserResponse> findProjectTeamByProjectId(Integer projectId,String jwt) {
-		List<Integer> teamIds=projectRepository.findTeamMemberIdsByProjectId(projectId);
-		log.info("this is the userId {}",teamIds.getClass());
-		return userService.findAllUsersByIds(teamIds,jwt);
-	}
 }

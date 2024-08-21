@@ -16,4 +16,15 @@ public class ProjectMapper {
 				project.getChatId()
 		);
 	}
+
+	public Project mapToProject(ProjectResponse projectResponse) {
+		return Project.builder()
+				.id(projectResponse.id())
+				.name(projectResponse.name())
+				.description(projectResponse.description())
+				.category(projectResponse.category())
+				.tags(projectResponse.tags())
+				.chatId(projectResponse.chatId())
+				.build();
+	}
 }

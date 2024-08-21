@@ -2,6 +2,7 @@ package com.roczyno.projectservice.external.chat;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,4 +13,6 @@ public interface ChatService {
 	ChatResponse createChat(@RequestBody Chat req, @PathVariable Integer projectId);
 	@PostMapping("/api/v1/chat/project/{projectId}/user/{userId}")
 	ChatResponse addUserToChat(@PathVariable Integer projectId, @PathVariable Integer userId);
+	@DeleteMapping("/api/v1/chat/remove/project/{projectId}/user/{userId}")
+	 String removeUserFromChat(@PathVariable Integer projectId, @PathVariable Integer userId);
 }

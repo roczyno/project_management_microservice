@@ -6,3 +6,32 @@ spring:
 
 server:
   port: 8088
+#Resilience4J
+resilience4j:
+  circuitbreaker:
+    instances:
+      userBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
+
+
+  retry:
+    instances:
+      userBreaker:
+        max-attempts: 5
+        wait-duration: 10s
+
+
+
+  ratelimiter:
+    instances:
+      userBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2

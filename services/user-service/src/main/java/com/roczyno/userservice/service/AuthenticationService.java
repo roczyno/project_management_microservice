@@ -96,9 +96,9 @@ public class AuthenticationService {
 	}
 
 	public List<String> subscriptionBreakerFallBack(Exception e) {
-		log.error("Chat service failed: {}", e.getMessage(), e);
+		log.error("Subscription service failed: {}", e.getMessage(), e);
 		List<String> list = new ArrayList<>();
-		list.add("Chat Service not available");
+		list.add("Subscription Service not available");
 		return list;
 	}
 

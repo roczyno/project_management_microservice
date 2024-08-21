@@ -7,13 +7,21 @@ import com.roczyno.subscriptionservice.repository.SubscriptionRepository;
 import com.roczyno.subscriptionservice.response.SubscriptionResponse;
 import com.roczyno.subscriptionservice.service.SubscriptionService;
 import com.roczyno.subscriptionservice.util.SubscriptionResponseMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SubscriptionServiceImpl implements SubscriptionService {
 	private final SubscriptionRepository subscriptionRepository;
 	private final SubscriptionResponseMapper mapper;
@@ -52,6 +60,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
+	@Transactional
+	@CircuitBreaker(name = "userBreaker",fallbackMethod = "userBreakerFallback")
+	@Retry(name = "userBreaker",fallbackMethod = "userBreakerFallback")
+	@RateLimiter(name = "userBreaker",fallbackMethod = "userBreakerFallback")
 	public SubscriptionResponse upgradeSubscription(Integer userId, PlanType planType) {
 		Subscription subscription=mapper.toSubscription(getUserSubscription(userId));
 		subscription.setPlanType(planType);
@@ -66,6 +78,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		var upgradedSubscription=subscriptionRepository.save(subscription);
 		userService.decreaseUserProjectSize(userId);
 		return mapper.toSubscriptionResponse(upgradedSubscription);
+	}
+
+	public List<String> userBreakerFallBack(Exception e) {
+		log.error("Subscription service failed: {}", e.getMessage(), e);
+		List<String> list = new ArrayList<>();
+		list.add("Subscription Service not available");
+		return list;
 	}
 
 

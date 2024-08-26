@@ -3,6 +3,7 @@ package com.roczyno.chatservice.controller;
 import com.roczyno.chatservice.request.MessageRequest;
 import com.roczyno.chatservice.service.MessageService;
 import com.roczyno.chatservice.util.ResponseHandler;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class MessageController {
 	private final MessageService messageService;
 
 	@PostMapping("/chat/{chatId}")
-	public ResponseEntity<Object> sendMessage(@PathVariable Integer chatId, @RequestBody MessageRequest req,
+	public ResponseEntity<Object> sendMessage(@PathVariable Integer chatId, @Valid @RequestBody MessageRequest req,
 													   @RequestHeader("Authorization") String jwt){
 		return ResponseHandler.successResponse(messageService.sendMessage(req,chatId,jwt), HttpStatus.OK);
 	}
@@ -39,7 +40,7 @@ public class MessageController {
 	}
 
 	@PutMapping("/chat/{chatId}")
-	public ResponseEntity<Object> updateMessage(@PathVariable Integer chatId,@RequestBody MessageRequest req,
+	public ResponseEntity<Object> updateMessage(@PathVariable Integer chatId,@Valid @RequestBody MessageRequest req,
 															   @RequestHeader("Authorization") String jwt){
 		return ResponseHandler.successResponse(messageService.updateMessage(chatId,jwt,req),HttpStatus.OK);
 	}

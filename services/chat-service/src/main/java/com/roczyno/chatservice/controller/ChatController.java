@@ -3,6 +3,7 @@ package com.roczyno.chatservice.controller;
 import com.roczyno.chatservice.model.Chat;
 import com.roczyno.chatservice.response.ChatResponse;
 import com.roczyno.chatservice.service.ChatService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class ChatController {
 		return ResponseEntity.ok(chatService.getChatByProjectId(projectId));
 	}
 	@PostMapping("/project/{projectId}")
-	public ResponseEntity<ChatResponse> createChat(@RequestBody Chat req,@PathVariable Integer projectId){
+	public ResponseEntity<ChatResponse> createChat(@Valid @RequestBody Chat req, @PathVariable Integer projectId){
 		return ResponseEntity.ok(chatService.createChat(req,projectId));
 	}
 	@PostMapping("/project/{projectId}/user/{userId}")

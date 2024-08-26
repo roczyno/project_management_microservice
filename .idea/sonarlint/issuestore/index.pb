@@ -352,3 +352,5 @@ Vservices/user-service/src/main/java/com/roczyno/userservice/response/AuthRespon
 Xservices/project-service/src/main/java/com/roczyno/projectservice/util/AppConstants.java,3\a\3a3e80f367a8748abd8b5b408a971b26fee787c1
 „
 Tservices/issue-service/src/main/java/com/roczyno/issueservice/util/AppConstants.java,d\d\ddbd2037e59d1211195bc845406884d0ee057124
+ˆ
+Xservices/comment-service/src/main/java/com/roczyno/commentservice/util/AppConstants.java,4\9\49599367baf510d1b19d69c6673b04d1436edffe

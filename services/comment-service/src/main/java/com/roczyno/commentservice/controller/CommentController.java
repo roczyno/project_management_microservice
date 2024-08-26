@@ -3,6 +3,7 @@ package com.roczyno.commentservice.controller;
 import com.roczyno.commentservice.request.CommentRequest;
 import com.roczyno.commentservice.service.CommentService;
 import com.roczyno.commentservice.util.ResponseHandler;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 	private final CommentService commentService;
 	@PostMapping("/issue/{issueId}")
-	public ResponseEntity<Object> addComment(@PathVariable Integer issueId, @RequestBody CommentRequest req,
+	public ResponseEntity<Object> addComment(@PathVariable Integer issueId, @Valid @RequestBody CommentRequest req,
 											 @RequestHeader("Authorization") String jwt){
 		return ResponseHandler.successResponse(commentService.createComment(req,jwt,issueId), HttpStatus.OK);
 	}
@@ -35,7 +36,7 @@ public class CommentController {
 		return ResponseHandler.successResponse(commentService.findCommentsByIssueId(issueId),HttpStatus.OK);
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateComment(@PathVariable Integer id,@RequestBody CommentRequest req,
+	public ResponseEntity<Object> updateComment(@PathVariable Integer id,@Valid @RequestBody CommentRequest req,
 												@RequestHeader("Authorization") String jwt)  {
 		return ResponseHandler.successResponse(commentService.updateComment(jwt,id,req),HttpStatus.OK);
 	}

@@ -354,3 +354,5 @@ Xservices/project-service/src/main/java/com/roczyno/projectservice/util/AppConst
 Tservices/issue-service/src/main/java/com/roczyno/issueservice/util/AppConstants.java,d\d\ddbd2037e59d1211195bc845406884d0ee057124
 ˆ
 Xservices/comment-service/src/main/java/com/roczyno/commentservice/util/AppConstants.java,4\9\49599367baf510d1b19d69c6673b04d1436edffe
+Ž
+^services/invitation-service/src/main/java/com/roczyno/invitationservice/util/AppConstants.java,f\e\fe8194f07e645682b7a8f9711d6fd8d62c64f561

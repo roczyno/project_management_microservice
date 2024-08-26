@@ -3,6 +3,7 @@ package com.roczyno.issueservice.controller;
 import com.roczyno.issueservice.request.IssueRequest;
 import com.roczyno.issueservice.service.IssueService;
 import com.roczyno.issueservice.util.ResponseHandler;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class IssueController {
 	private final IssueService issueService;
 
 	@PostMapping("/project/{projectId}")
-	public ResponseEntity<Object> createIssue(@RequestBody IssueRequest req, @PathVariable Integer projectId,
-													 @RequestHeader("Authorization") String jwt){
+	public ResponseEntity<Object> createIssue(@Valid @RequestBody IssueRequest req, @PathVariable Integer projectId,
+											  @RequestHeader("Authorization") String jwt){
 		return ResponseHandler.successResponse(issueService.createIssue(req,jwt,projectId), HttpStatus.OK);
 	}
 	@DeleteMapping("/{id}")
@@ -50,7 +51,7 @@ public class IssueController {
 		return ResponseHandler.successResponse(issueService.updateIssueStatus(issueId,status),HttpStatus.OK);
 	}
 	@PutMapping("/{issueId}")
-	public ResponseEntity<Object> updateIssue(@RequestBody IssueRequest req,@PathVariable Integer issueId){
+	public ResponseEntity<Object> updateIssue(@Valid @RequestBody IssueRequest req,@PathVariable Integer issueId){
 		return ResponseHandler.successResponse(issueService.updateIssue(issueId,req),HttpStatus.OK);
 	}
 

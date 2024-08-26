@@ -41,6 +41,7 @@ public class Issue {
 	private String priority;
 	private LocalDate dueDate;
 	@ElementCollection
+	@Builder.Default
 	private List<String> tags = new ArrayList<>();
 	private Integer assigneeId;
 	private Integer creatorId;

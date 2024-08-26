@@ -3,6 +3,7 @@ package com.roczyno.projectservice.controller;
 import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.service.ProjectService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +26,7 @@ public class ProjectController {
 	private final ProjectService projectService;
 
 	@PostMapping("/create")
-	public ResponseEntity<Object> addProject(@RequestBody ProjectRequest req, @RequestHeader("Authorization") String jwt) {
+	public ResponseEntity<Object> addProject(@Valid @RequestBody ProjectRequest req, @RequestHeader("Authorization") String jwt) {
 		return  ResponseEntity.ok(projectService.createProject(req,jwt));
 	}
 	@GetMapping("/{id}")
@@ -39,7 +40,7 @@ public class ProjectController {
 	}
 	@PutMapping("/{projectId}")
 	public ResponseEntity<Object> updateProject(@PathVariable Integer projectId,
-												@RequestBody ProjectRequest projectRequest,
+												@Valid @RequestBody ProjectRequest projectRequest,
 												@RequestHeader("Authorization") String jwt) {
 
 		return  ResponseEntity.ok(projectService.updateProject(projectId,projectRequest,jwt));
@@ -63,7 +64,8 @@ public class ProjectController {
 	}
 
 	@GetMapping("/team/{projectId}")
-	public ResponseEntity<List<UserResponse>> getProjectTeam(@PathVariable Integer projectId,@RequestHeader("Authorization") String jwt){
+	public ResponseEntity<List<UserResponse>> getProjectTeam(@PathVariable Integer projectId,
+															 @RequestHeader("Authorization") String jwt){
 		return ResponseEntity.ok(projectService.findProjectTeamByProjectId(projectId,jwt));
 	}
 	@GetMapping("/search")

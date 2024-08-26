@@ -348,3 +348,5 @@ Rservices/user-service/src/main/java/com/roczyno/userservice/util/AppConstants.j
 \services/user-service/src/main/java/com/roczyno/userservice/request/RegistrationRequest.java,d\c\dc1c730713c76a3e68d389ab85c68e0e3f3816a9
 †
 Vservices/user-service/src/main/java/com/roczyno/userservice/response/AuthResponse.java,1\2\12956e3454568ec7ae80876ff79856b2a11ef73a
+ˆ
+Xservices/project-service/src/main/java/com/roczyno/projectservice/util/AppConstants.java,3\a\3a3e80f367a8748abd8b5b408a971b26fee787c1

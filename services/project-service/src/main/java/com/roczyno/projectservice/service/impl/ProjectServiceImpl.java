@@ -65,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
 		projectWithUser.setChatId(projectChat.id());
 		Project finalProject = projectRepository.save(projectWithUser);
 
-		userService.increaseUserProjectSize(user.id());
+		userService.increaseUserProjectSize(user.id(),jwt);
 		return mapper.mapToProjectResponse(finalProject);
 	}
 
@@ -229,13 +229,13 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	// Fallback methods
-	public List<String> userBreakerFallBack(Exception e) {
+	public List<String> userBreakerFallback(Exception e) {
 		log.error("User service failed: {}", e.getMessage(), e);
 		List<String> list = new ArrayList<>();
 		list.add("User Service not available");
 		return list;
 	}
-	public List<String> chatBreakerFallBack(Exception e) {
+	public List<String> chatBreakerFallback(Exception e) {
 		log.error("Chat service failed: {}", e.getMessage(), e);
 		List<String> list = new ArrayList<>();
 		list.add("Chat Service not available");

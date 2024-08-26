@@ -334,3 +334,17 @@ Xservices/chat-service/src/main/java/com/roczyno/chatservice/controller/RealTime
 [services/chat-service/src/main/java/com/roczyno/chatservice/request/SendMessageRequest.java,a\7\a73ca3cc3889cf49f88825acbb4126abfab59c59
 à
 Xservices/chat-service/src/main/java/com/roczyno/chatservice/exception/ChatException.java,c\0\c0913238c2b327c9982b838f93a84f763e8bfc60
+Ñ
+Tservices/user-service/src/main/java/com/roczyno/userservice/request/AuthRequest.java,8\5\858325dddda67e291cdf8f8dff5c0f75b708d7b5
+Ç
+Rservices/user-service/src/main/java/com/roczyno/userservice/util/AppConstants.java,6\b\6bfa9b0db8d4537c9a29617444efdef0db2a59c8
+é
+^services/user-service/src/main/java/com/roczyno/userservice/request/ChangePasswordRequest.java,5\4\5476a5811e1c9cab670c9e6138f75b58cf208fc9
+ç
+]services/user-service/src/main/java/com/roczyno/userservice/request/PasswordResetRequest.java,2\f\2f72c22a02ed3509005f6b11742411aa1edfcce9
+é
+^services/user-service/src/main/java/com/roczyno/userservice/request/PasswordUpdateRequest.java,c\7\c7b3138280d1503cd7e5208eeb0864e41261f106
+å
+\services/user-service/src/main/java/com/roczyno/userservice/request/RegistrationRequest.java,d\c\dc1c730713c76a3e68d389ab85c68e0e3f3816a9
+Ü
+Vservices/user-service/src/main/java/com/roczyno/userservice/response/AuthResponse.java,1\2\12956e3454568ec7ae80876ff79856b2a11ef73a

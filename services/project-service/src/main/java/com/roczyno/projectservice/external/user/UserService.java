@@ -17,5 +17,5 @@ public interface UserService {
 	@PostMapping("/api/v1/user/find-by-ids")
 	List<UserResponse> findAllUsersByIds(@RequestBody List<Integer> userIds,@RequestHeader("Authorization") String jwt);
 	@PutMapping("/api/v1/user/increase/project-size/{userId}")
-	String increaseUserProjectSize(@PathVariable Integer userId);
+	String increaseUserProjectSize(@PathVariable Integer userId,@RequestHeader("Authorization") String jwt);
 }

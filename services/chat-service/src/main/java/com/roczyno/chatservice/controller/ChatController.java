@@ -1,5 +1,6 @@
 package com.roczyno.chatservice.controller;
 
+import com.roczyno.chatservice.external.user.UserResponse;
 import com.roczyno.chatservice.model.Chat;
 import com.roczyno.chatservice.response.ChatResponse;
 import com.roczyno.chatservice.service.ChatService;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/chat")
@@ -35,5 +39,11 @@ public class ChatController {
 	@PutMapping("/remove/project/{projectId}/user/{userId}")
 	public ResponseEntity<String> removeUserFromChat(@PathVariable Integer projectId, @PathVariable Integer userId){
 		return ResponseEntity.ok(chatService.removeUserFromChat(projectId,userId));
+	}
+	@GetMapping("/{chatId}/project/{projectId}/members")
+	public ResponseEntity<List<UserResponse>> getChatMembers(@PathVariable Integer chatId,
+															 @PathVariable Integer projectId,
+															 @RequestHeader("Authorization") String jwt){
+		return ResponseEntity.ok(chatService.getChatProjectMembers(chatId,projectId,jwt));
 	}
 }

@@ -16,4 +16,13 @@ public class ChatMapper {
 				req.getCreatedAt()
 		);
 	}
+
+	public Chat toChat(ChatResponse chatResponse) {
+		return Chat.builder()
+				.id(chatResponse.id())
+				.projectId(chatResponse.projectId())
+				.teamMemberIds(chatResponse.teamMemberIds())
+				.createdAt(chatResponse.createdAt())
+				.build();
+	}
 }

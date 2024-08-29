@@ -18,4 +18,6 @@ public interface UserService {
 	List<UserResponse> findAllUsersByIds(@RequestBody List<Integer> userIds,@RequestHeader("Authorization") String jwt);
 	@PutMapping("/api/v1/user/increase/project-size/{userId}")
 	String increaseUserProjectSize(@PathVariable Integer userId,@RequestHeader("Authorization") String jwt);
+	@GetMapping("/api/v1/user/{userId}")
+	UserResponse getUserById(@PathVariable Integer userId,@RequestHeader("Authorization") String jwt);
 }

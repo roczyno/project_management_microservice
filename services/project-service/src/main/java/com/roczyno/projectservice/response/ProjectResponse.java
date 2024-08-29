@@ -8,6 +8,7 @@ public record ProjectResponse(
 		String description,
 		String category,
 		List<String> tags,
-		Integer chatId
+		Integer chatId,
+		Integer userId
 ) {
 }

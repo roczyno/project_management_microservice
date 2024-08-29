@@ -3,10 +3,12 @@ package com.roczyno.projectservice.model;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -34,9 +38,9 @@ public class Project {
 	@Builder.Default
 	private List<String> tags = new ArrayList<>();
 	private Integer userId;
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
-	private List<Integer> teamMemberIds = new ArrayList<>();
+	private Set<Integer> teamMemberIds = new HashSet<>();
 	private Integer chatId;
 	private LocalDateTime createdAt;
 

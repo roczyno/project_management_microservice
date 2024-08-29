@@ -2,6 +2,7 @@ package com.roczyno.projectservice.controller;
 
 import com.roczyno.projectservice.external.user.UserResponse;
 import com.roczyno.projectservice.request.ProjectRequest;
+import com.roczyno.projectservice.response.ProjectResponse;
 import com.roczyno.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,41 +27,42 @@ public class ProjectController {
 	private final ProjectService projectService;
 
 	@PostMapping("/create")
-	public ResponseEntity<Object> addProject(@Valid @RequestBody ProjectRequest req, @RequestHeader("Authorization") String jwt) {
+	public ResponseEntity<ProjectResponse> addProject(@Valid @RequestBody ProjectRequest req, @RequestHeader("Authorization") String jwt) {
 		return  ResponseEntity.ok(projectService.createProject(req,jwt));
 	}
 	@GetMapping("/{id}")
-	public ResponseEntity<Object>getProject(@PathVariable Integer id){
+	public ResponseEntity<ProjectResponse>getProject(@PathVariable Integer id){
 		return  ResponseEntity.ok(projectService.getProject(id));
 	}
 	@GetMapping("/all")
-	public ResponseEntity<Object> getAllProjects(@RequestHeader("Authorization") String jwt
+	public ResponseEntity<List<ProjectResponse>> getAllProjects(@RequestHeader("Authorization") String jwt
 			, @RequestParam(required = false) String category, @RequestParam(required = false) String tag){
 		return  ResponseEntity.ok(projectService.getProjectByTeam(jwt,category,tag));
 	}
 	@PutMapping("/{projectId}")
-	public ResponseEntity<Object> updateProject(@PathVariable Integer projectId,
+	public ResponseEntity<ProjectResponse> updateProject(@PathVariable Integer projectId,
 												@Valid @RequestBody ProjectRequest projectRequest,
 												@RequestHeader("Authorization") String jwt) {
 
 		return  ResponseEntity.ok(projectService.updateProject(projectId,projectRequest,jwt));
 	}
 	@DeleteMapping("/{projectId}")
-	public ResponseEntity<Object> deleteProject(@PathVariable Integer projectId,
+	public ResponseEntity<String> deleteProject(@PathVariable Integer projectId,
 												@RequestHeader("Authorization") String jwt){
 		return  ResponseEntity.ok(projectService.deleteProject(projectId,jwt));
 	}
 
 	@PostMapping("/add/{projectId}")
-	public ResponseEntity<Object> addUserToProject(@PathVariable Integer projectId,
+	public ResponseEntity<String> addUserToProject(@PathVariable Integer projectId,
 												   @RequestHeader("Authorization") String jwt){
 		return  ResponseEntity.ok(projectService.addUserToProject(projectId, jwt));
 	}
-	@PostMapping("/remove/{projectId}")
-	public ResponseEntity<Object> removeUserFromProject(@PathVariable Integer projectId,
+	@PostMapping("/remove/{projectId}/user/{userId}")
+	public ResponseEntity<String> removeUserFromProject(@PathVariable Integer projectId,
+														@PathVariable Integer userId,
 														@RequestHeader("Authorization") String jwt)
 	{
-		return  ResponseEntity.ok(projectService.removeUserFromProject(projectId,jwt));
+		return  ResponseEntity.ok(projectService.removeUserFromProject(projectId,userId,jwt));
 	}
 
 	@GetMapping("/team/{projectId}")
@@ -69,7 +71,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.findProjectTeamByProjectId(projectId,jwt));
 	}
 	@GetMapping("/search")
-	public ResponseEntity<Object> searchProject(@RequestParam(required = false) String tag,
+	public ResponseEntity<List<ProjectResponse>> searchProject(@RequestParam(required = false) String tag,
 												@RequestHeader("Authorization") String jwt) {
 		return  ResponseEntity.ok(projectService.searchProject(tag,jwt));
 	}

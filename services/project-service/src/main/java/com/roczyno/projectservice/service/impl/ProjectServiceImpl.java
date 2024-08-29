@@ -15,16 +15,12 @@ import com.roczyno.projectservice.request.ProjectRequest;
 import com.roczyno.projectservice.response.ProjectResponse;
 import com.roczyno.projectservice.service.ProjectService;
 import com.roczyno.projectservice.util.ProjectMapper;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,9 +46,9 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Transactional
 	@Override
-	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 	public ProjectResponse createProject(ProjectRequest req, String jwt) {
 		UserResponse user = userService.getUserProfile(jwt);
 		validateUserProjectLimit(user);
@@ -78,9 +74,10 @@ public class ProjectServiceImpl implements ProjectService {
 		return mapper.mapToProjectResponse(project);
 	}
 
-	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
-	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
-	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@Transactional
 	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
 		UserResponse user = userService.getUserProfile(jwt);
 		List<Project> projects = projectRepository.findByTeamOrOwner(user.id(), user.id());
@@ -114,6 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Transactional
 	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
 		Project project = validateOwnershipAndGetProject(projectId, jwt);
 		updateProjectDetails(project, req);
@@ -124,11 +122,12 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Transactional
 	@Override
-	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 	public String addUserToProject(Integer projectId, String jwt) {
-		Project project = mapper.mapToProject(getProject(projectId));
+		Project project =projectRepository.findById(projectId)
+				.orElseThrow(()-> new ProjectException("Project not found"));
 		UserResponse user = userService.getUserProfile(jwt);
 
 		if (project.getTeamMemberIds().contains(user.id()) || project.getUserId().equals(user.id())) {
@@ -136,24 +135,39 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		project.getTeamMemberIds().add(user.id());
+		projectRepository.save(project);
 		chatService.addUserToChat(projectId, user.id());
 		return "User added successfully";
 	}
 
 	@Override
-	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
-	public String removeUserFromProject(Integer projectId, String jwt) {
-		Project project = validateOwnershipAndGetProject(projectId, jwt);
-		UserResponse user = userService.getUserProfile(jwt);
+	@Transactional
+//	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+//	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	public String removeUserFromProject(Integer projectId, Integer userId, String jwt) {
+//		Project project = validateOwnershipAndGetProject(projectId, jwt);
+		Project project=projectRepository.findById(projectId)
+				.orElseThrow(()->new ProjectException("Project not found"));
 
-		if (!project.getTeamMemberIds().contains(user.id())) {
+		UserResponse userToBeRemoved=userService.getUserById(userId,jwt);
+		UserResponse user = userService.getUserProfile(jwt);
+		log.info("this is the team {}",project.getTeamMemberIds());
+		if(project.getUserId().equals(userToBeRemoved.id())){
+			throw new ProjectException("the project owner can't be removed");
+		}
+		if(user.id().equals(userToBeRemoved.id())){
+			throw new ProjectException("You cant remove yourself");
+		}
+
+		if (!project.getTeamMemberIds().contains(userToBeRemoved.id())) {
 			throw new ProjectException(ERROR_USER_NOT_PART_OF_TEAM);
 		}
 
-		project.getTeamMemberIds().remove(user.id());
-		chatService.removeUserFromChat(projectId, user.id());
+
+		project.getTeamMemberIds().remove(userToBeRemoved.id());
+		projectRepository.save(project);
+		chatService.removeUserFromChat(projectId, userToBeRemoved.id());
 		return "User removed successfully";
 	}
 
@@ -164,9 +178,10 @@ public class ProjectServiceImpl implements ProjectService {
 		return List.of();
 	}
 
-	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
-	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
-	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+//	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
+	@Override
 	public List<UserResponse> findProjectTeamByProjectId(Integer projectId, String jwt) {
 		List<Integer> teamIds = projectRepository.findTeamMemberIdsByProjectId(projectId);
 		return userService.findAllUsersByIds(teamIds, jwt);
@@ -229,18 +244,18 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	// Fallback methods
-	public List<String> userBreakerFallback(Exception e) {
-		log.error("User service failed: {}", e.getMessage(), e);
-		List<String> list = new ArrayList<>();
-		list.add("User Service not available");
-		return list;
-	}
-	public List<String> chatBreakerFallback(Exception e) {
-		log.error("Chat service failed: {}", e.getMessage(), e);
-		List<String> list = new ArrayList<>();
-		list.add("Chat Service not available");
-		return list;
-	}
+//	public List<String> userBreakerFallback(Exception e) {
+//		log.error("User service failed: {}", e.getMessage(), e);
+//		List<String> list = new ArrayList<>();
+//		list.add("User Service not available");
+//		return list;
+//	}
+//	public List<String> chatBreakerFallback(Exception e) {
+//		log.error("Chat service failed: {}", e.getMessage(), e);
+//		List<String> list = new ArrayList<>();
+//		list.add("Chat Service not available");
+//		return list;
+//	}
 
 
 }

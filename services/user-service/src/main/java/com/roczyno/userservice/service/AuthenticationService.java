@@ -95,7 +95,7 @@ public class AuthenticationService {
 		return "user created successfully";
 	}
 
-	public List<String> subscriptionBreakerFallBack(Exception e) {
+	public List<String> subscriptionBreakerFallback(Exception e) {
 		log.error("Subscription service failed: {}", e.getMessage(), e);
 		List<String> list = new ArrayList<>();
 		list.add("Subscription Service not available");

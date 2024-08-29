@@ -59,11 +59,9 @@ public class InvitationServiceImpl implements InvitationService {
 	}
 
 	@Override
-	public Invitation acceptInvitation(String token, String jwt) {
+	public void acceptInvitation(String token, String jwt) {
 		var invitation=invitationRepository.findByToken(token);
-		UserResponse user=userService.getUserProfile(jwt);
-
 		projectService.addUserToProject(invitation.getProjectId(), jwt);
-		return invitation;
+
 	}
 }

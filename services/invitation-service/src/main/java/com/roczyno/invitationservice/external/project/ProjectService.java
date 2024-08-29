@@ -12,6 +12,6 @@ public interface ProjectService {
 	ProjectResponse getProject(@PathVariable Integer id);
 
 	@PostMapping("/api/v1/project/add/{id}")
-	ProjectResponse addUserToProject(@PathVariable Integer id,@RequestHeader("Authorization") String jwt);
+	String addUserToProject(@PathVariable Integer id,@RequestHeader("Authorization") String jwt);
 
 }

@@ -13,7 +13,8 @@ public class ProjectMapper {
 				project.getDescription(),
 				project.getCategory(),
 				project.getTags(),
-				project.getChatId()
+				project.getChatId(),
+				project.getUserId()
 		);
 	}
 
@@ -25,6 +26,7 @@ public class ProjectMapper {
 				.category(projectResponse.category())
 				.tags(projectResponse.tags())
 				.chatId(projectResponse.chatId())
+				.userId(projectResponse.userId())
 				.build();
 	}
 }

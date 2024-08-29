@@ -1,11 +1,10 @@
 package com.roczyno.invitationservice.controller;
 
+import com.roczyno.invitationservice.model.Invitation;
 import com.roczyno.invitationservice.request.InviteRequest;
 import com.roczyno.invitationservice.service.InvitationService;
-import com.roczyno.invitationservice.util.ResponseHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,15 +20,14 @@ public class InvitationController {
 	private final InvitationService invitationService;
 
 	@PostMapping("/send")
-	public ResponseEntity<Object> sendInvite(@Valid @RequestBody InviteRequest req,
+	public ResponseEntity<String> sendInvite(@Valid @RequestBody InviteRequest req,
 											 @RequestHeader("Authorization") String jwt){
-		return ResponseHandler.successResponse(invitationService.sendInvitation(req.email(), req.projectId(), jwt),
-				HttpStatus.OK);
+		return ResponseEntity.ok(invitationService.sendInvitation(req.email(), req.projectId(), jwt));
 	}
 	@PostMapping("/accept")
-	public ResponseEntity<Object> acceptInviteToProject(@RequestHeader("Authorization") String jwt,
-														@RequestParam String token) {
-		return ResponseHandler.successResponse(invitationService.acceptInvitation(token, jwt),HttpStatus.OK);
+	public void acceptInviteToProject(@RequestHeader("Authorization") String jwt,
+															@RequestParam String token) {
+		invitationService.acceptInvitation(token, jwt);
 	}
 
 }

@@ -19,7 +19,7 @@ public interface ProjectService {
 
 	String addUserToProject(Integer projectId, String jwt);
 
-	String removeUserFromProject(Integer projectId, String jwt);
+	String removeUserFromProject(Integer projectId, Integer userId, String jwt);
 
 	List<ProjectResponse> searchProject(String keyword,String jwt);
 

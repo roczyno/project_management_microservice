@@ -34,6 +34,11 @@ spring:
           predicates:
             - Path=/api/v1/comment/**
 
+        - id: chat-service
+          uri: lb:http://CHAT-SERVICE
+          predicates:
+            - Path=/api/v1/chat/**,/api/v1/message/**
+
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 

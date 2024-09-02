@@ -65,6 +65,39 @@ public class ProjectServiceImpl implements ProjectService {
 		return mapper.mapToProjectResponse(finalProject);
 	}
 
+	private void validateUserProjectLimit(UserResponse user) {
+		SubscriptionResponse userSubscription = subscriptionService.getUserSubscription(user.id());
+		if (userSubscription.planType() == PlanType.FREE && user.projectSize() > 2) {
+			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_FREE);
+		} else if (userSubscription.planType() == PlanType.MONTHLY && user.projectSize() > 10) {
+			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_MONTHLY);
+		}
+	}
+
+	private Project createAndSaveNewProject(ProjectRequest req, Integer userId) {
+		Project newProject = Project.builder()
+				.name(req.name())
+				.description(req.description())
+				.tags(req.tags())
+				.category(req.category())
+				.createdAt(LocalDateTime.now())
+				.userId(userId)
+				.build();
+		return projectRepository.save(newProject);
+	}
+
+	private Project addUserToProjectTeam(Project project, Integer userId) {
+		project.getTeamMemberIds().add(userId);
+		return projectRepository.save(project);
+	}
+
+	private ChatResponse createProjectChat(Project project) {
+		Chat chat = new Chat();
+		chat.setCreatedAt(LocalDateTime.now());
+		chat.setProjectId(project.getId());
+		return chatService.createChat(chat, project.getId());
+	}
+
 
 
 	@Override
@@ -203,38 +236,9 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 
-	private void validateUserProjectLimit(UserResponse user) {
-		SubscriptionResponse userSubscription = subscriptionService.getUserSubscription(user.id());
-		if (userSubscription.planType() == PlanType.FREE && user.projectSize() > 2) {
-			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_FREE);
-		} else if (userSubscription.planType() == PlanType.MONTHLY && user.projectSize() > 10) {
-			throw new ProjectException(ERROR_MAX_PROJECTS_REACHED_MONTHLY);
-		}
-	}
 
-	private Project createAndSaveNewProject(ProjectRequest req, Integer userId) {
-		Project newProject = Project.builder()
-				.name(req.name())
-				.description(req.description())
-				.tags(req.tags())
-				.category(req.category())
-				.createdAt(LocalDateTime.now())
-				.userId(userId)
-				.build();
-		return projectRepository.save(newProject);
-	}
 
-	private Project addUserToProjectTeam(Project project, Integer userId) {
-		project.getTeamMemberIds().add(userId);
-		return projectRepository.save(project);
-	}
 
-	private ChatResponse createProjectChat(Project project) {
-		Chat chat = new Chat();
-		chat.setCreatedAt(LocalDateTime.now());
-		chat.setProjectId(project.getId());
-		return chatService.createChat(chat, project.getId());
-	}
 
 	private void updateProjectDetails(Project project, ProjectRequest req) {
 		Optional.ofNullable(req.name()).ifPresent(project::setName);

@@ -3,9 +3,11 @@ package com.roczyno.projectservice.request;
 import com.roczyno.projectservice.util.AppConstants;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record ProjectRequest(
 		@NotNull(message = AppConstants.CANNOT_BE_NULL)
 		@Size(min = 3, message = AppConstants.NAME_SIZE_MESSAGE)

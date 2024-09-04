@@ -14,4 +14,5 @@ public interface ProjectRepository extends JpaRepository<Project,Integer> {
 	@Query("select p.teamMemberIds from Project p where p.id = :projectId")
 	List<Integer> findTeamMemberIdsByProjectId(@Param("projectId") Integer projectId);
 
+	List<Project> findByNameContainingIgnoreCase(String s);
 }

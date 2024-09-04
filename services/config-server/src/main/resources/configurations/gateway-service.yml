@@ -18,6 +18,9 @@ spring:
           uri: lb:http://PROJECT-SERVICE
           predicates:
             - Path=/api/v1/project/**
+            - Header=Authorization, Bearer (.*)
+          filters:
+            - AuthorizationHeaderFilter
 
         - id: issue-service
           uri: lb:http://ISSUE-SERVICE

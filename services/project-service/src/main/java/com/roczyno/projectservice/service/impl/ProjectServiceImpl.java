@@ -185,7 +185,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 		UserResponse userToBeRemoved=userService.getUserById(userId,jwt);
 		UserResponse user = userService.getUserProfile(jwt);
-		log.info("this is the team {}",project.getTeamMemberIds());
 		if(project.getUserId().equals(userToBeRemoved.id())){
 			throw new ProjectException("the project owner can't be removed");
 		}
@@ -206,9 +205,10 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<ProjectResponse> searchProject(String keyword, String jwt) {
-		// Placeholder for actual implementation
-		// This could include a repository query or service method for searching projects by keyword
-		return List.of();
+		List<Project> projects=projectRepository.findByNameContainingIgnoreCase(keyword);
+		return projects.stream()
+				.map(mapper::mapToProjectResponse)
+				.toList();
 	}
 
 //	@CircuitBreaker(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")

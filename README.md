@@ -11,7 +11,7 @@ This project follows a microservices architecture pattern with the following com
 - **Discovery Service**: Service registry for dynamic service discovery
 - **Multiple Domain-Specific Microservices**: Each handling specific business functionality
 
-![Architecture Diagram](https://miro.medium.com/v2/resize:fit:1400/1*QzP9v1ovZdToyThz2H0QAA.png)
+![Architecture Diagram](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=taskManager.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D16X65zEjo0brillBOS_Zh9HiAoulYogUH%26export%3Ddownload)
 
 ## Microservices
 

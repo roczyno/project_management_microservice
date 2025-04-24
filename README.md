@@ -38,6 +38,7 @@ This project follows a microservices architecture pattern with the following com
 - **Databases**:
   - PostgreSQL: For relational data
   - MongoDB: For document-based data
+  - Redis: For caching
 - **Messaging**:
   - Apache Kafka: For asynchronous communication between services
 - **Monitoring and Tracing**:
@@ -54,6 +55,7 @@ This project follows a microservices architecture pattern with the following com
 - Maven
 - PostgreSQL (if running locally)
 - MongoDB (if running locally)
+- Redis (if running locally)
 
 ## Getting Started
 
@@ -82,18 +84,18 @@ This project follows a microservices architecture pattern with the following com
 
 1. Start the infrastructure services using Docker Compose:
    ```bash
-   docker-compose up -d postgres mongoDB kafka zookeeper zipkin
+   docker-compose up -d postgres mongoDB redis kafka zookeeper zipkin
    ```
 
 2. Run each microservice individually in your IDE or using Maven:
    ```bash
    cd services/config-server
    mvn spring-boot:run
-   
+
    # In a new terminal
    cd services/discovery-service
    mvn spring-boot:run
-   
+
    # Continue for other services
    ```
 
@@ -138,6 +140,43 @@ The API Gateway exposes the following main endpoints:
 - **Eureka Dashboard**: http://localhost:8761 - For service registry status
 - **MongoDB Express**: http://localhost:8081 - For MongoDB administration
 - **MailDev**: http://localhost:1080 - For email testing
+
+## Caching
+
+The project uses Redis for caching to improve performance and reduce database load. The caching implementation includes:
+
+### Configuration
+
+- Redis is configured in the config server for centralized management
+- Cache TTL (Time-To-Live): 60000ms (60 seconds)
+- Null values are not cached
+
+### Cached Entities
+
+- **Project Service**:
+  - `projects`: Individual project details
+  - `userProjects`: Projects associated with a user
+  - `projectTeams`: Team members of a project
+  - `projectSearch`: Project search results
+
+- **User Service**:
+  - `users`: Individual user details
+  - `userProfiles`: User profile information
+  - `userLists`: Lists of users
+
+### Cache Eviction
+
+Cache entries are automatically evicted when the underlying data changes:
+- When a project is updated or deleted
+- When users are added to or removed from projects
+- When user project counts are modified
+
+### Implementation
+
+The caching is implemented using Spring Cache annotations:
+- `@Cacheable`: For caching method results
+- `@CacheEvict`: For removing cache entries when data changes
+- `@CachePut`: For updating cache entries
 
 ## Contributing
 

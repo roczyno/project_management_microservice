@@ -18,18 +18,21 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final UserMapper mapper;
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "userProfiles", key = "#connectedUser.name")
 	public UserResponse findUserProfileByJwt(Authentication connectedUser) {
 		User user= (User) connectedUser.getPrincipal();
 		return mapper.mapToUserResponse(userRepository.findByEmail(user.getEmail()));
 	}
 
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "users", key = "#userId")
 	public UserResponse findUserById(Integer userId) {
 		User user= userRepository.findById(userId).orElseThrow(()->new UserException("User not found"));
 		return mapper.mapToUserResponse(user);
 	}
 
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "userLists", key = "#userIds.hashCode()")
 	public List<UserResponse> findAllUsersByIds(List<Integer> userIds) {
 		List<User> users= userRepository.findByIdIsIn(userIds);
 		return users.stream()
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@org.springframework.cache.annotation.CacheEvict(value = {"users", "userProfiles", "userLists"}, allEntries = true)
 	public String increaseUserProjectSize(Integer userId) {
 		User user=mapper.mapToUser(findUserById(userId));
 		user.setProjectSize(user.getProjectSize()+1);
@@ -46,6 +50,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@org.springframework.cache.annotation.CacheEvict(value = {"users", "userProfiles", "userLists"}, allEntries = true)
 	public String decreaseUserProjectSize(Integer userId) {
 		User user=mapper.mapToUser(findUserById(userId));
 		user.setProjectSize(0);

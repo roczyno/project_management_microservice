@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @EnableFeignClients
+@org.springframework.cache.annotation.EnableCaching
 public class UserServiceApplication {
 
 	public static void main(String[] args) {

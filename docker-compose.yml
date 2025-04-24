@@ -14,6 +14,17 @@ services:
       - pm_microservice_net
     restart: unless-stopped
 
+  redis:
+    container_name: pm_redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+
   mongoDB:
     container_name: pm_mongo_db
     image: mongo
@@ -93,3 +104,4 @@ networks:
 volumes:
   postgres:
   mongo:
+  redis:

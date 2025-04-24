@@ -101,6 +101,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "projects", key = "#projectId")
 	public ProjectResponse getProject(Integer projectId) {
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(()-> new ProjectException(ERROR_PROJECT_NOT_FOUND));
@@ -111,6 +112,7 @@ public class ProjectServiceImpl implements ProjectService {
 //	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
 //	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
 	@Transactional
+	@org.springframework.cache.annotation.Cacheable(value = "userProjects", key = "{#jwt, #category, #tag}")
 	public List<ProjectResponse> getProjectByTeam(String jwt, String category, String tag) {
 		UserResponse user = userService.getUserProfile(jwt);
 		List<Project> projects = projectRepository.findByTeamOrOwner(user.id(), user.id());
@@ -137,6 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@org.springframework.cache.annotation.CacheEvict(value = {"projects", "userProjects", "projectTeams", "projectSearch"}, allEntries = true)
 	public String deleteProject(Integer projectId, String jwt) {
 		Project project = validateOwnershipAndGetProject(projectId, jwt);
 		projectRepository.delete(project);
@@ -145,6 +148,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional
+	@org.springframework.cache.annotation.CacheEvict(value = {"projects", "userProjects", "projectSearch"}, key = "#projectId")
+	@org.springframework.cache.annotation.CachePut(value = "projects", key = "#projectId")
 	public ProjectResponse updateProject(Integer projectId, ProjectRequest req, String jwt) {
 		Project project = validateOwnershipAndGetProject(projectId, jwt);
 		updateProjectDetails(project, req);
@@ -158,6 +163,7 @@ public class ProjectServiceImpl implements ProjectService {
 //	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 //	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 //	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@org.springframework.cache.annotation.CacheEvict(value = {"projectTeams", "userProjects"}, allEntries = true)
 	public String addUserToProject(Integer projectId, String jwt) {
 		Project project =projectRepository.findById(projectId)
 				.orElseThrow(()-> new ProjectException("Project not found"));
@@ -178,6 +184,7 @@ public class ProjectServiceImpl implements ProjectService {
 //	@CircuitBreaker(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 //	@Retry(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
 //	@RateLimiter(name = CHAT_BREAKER, fallbackMethod = "chatBreakerFallback")
+	@org.springframework.cache.annotation.CacheEvict(value = {"projectTeams", "userProjects"}, allEntries = true)
 	public String removeUserFromProject(Integer projectId, Integer userId, String jwt) {
 //		Project project = validateOwnershipAndGetProject(projectId, jwt);
 		Project project=projectRepository.findById(projectId)
@@ -204,6 +211,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "projectSearch", key = "#keyword")
 	public List<ProjectResponse> searchProject(String keyword, String jwt) {
 		List<Project> projects=projectRepository.findByNameContainingIgnoreCase(keyword);
 		return projects.stream()
@@ -215,6 +223,7 @@ public class ProjectServiceImpl implements ProjectService {
 //	@Retry(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
 //	@RateLimiter(name = USER_BREAKER, fallbackMethod = "userBreakerFallback")
 	@Override
+	@org.springframework.cache.annotation.Cacheable(value = "projectTeams", key = "#projectId")
 	public List<UserResponse> findProjectTeamByProjectId(Integer projectId, String jwt) {
 		List<Integer> teamIds = projectRepository.findTeamMemberIdsByProjectId(projectId);
 		return userService.findAllUsersByIds(teamIds, jwt);

@@ -33,12 +33,25 @@ resilience4j:
         failure-rate-threshold: 50
         automatic-transition-from-open-to-half-open-enabled: true
         sliding-window-type: count_based
+
+      subscriptionBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
   retry:
     instances:
       chatBreaker:
         max-attempts: 5
         wait-duration: 10s
       userBreaker:
+        max-attempts: 5
+        wait-duration: 10s
+      subscriptionBreaker:
         max-attempts: 5
         wait-duration: 10s
 
@@ -53,7 +66,7 @@ resilience4j:
         timeout-duration: 0
         limit-refresh-period: 4
         limit-for-period: 2
-
-
-
-
+      subscriptionBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2

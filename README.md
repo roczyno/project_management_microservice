@@ -186,6 +186,42 @@ The caching is implemented using Spring Cache annotations:
 4. Push to the branch: `git push origin feature/your-feature-name`
 5. Submit a pull request
 
+## Circuit Breaker Pattern
+
+The project implements the Circuit Breaker pattern using Resilience4j to prevent cascading failures in distributed systems. This pattern helps maintain system stability when external services fail.
+
+### Implementation
+
+The Project Service has been configured with circuit breakers for all external service calls:
+
+- **User Service** - For user-related operations
+- **Chat Service** - For chat-related operations
+- **Subscription Service** - For subscription-related operations
+
+### How It Works
+
+1. **Circuit Breaker**: Detects failures and prevents repeated calls to failing services
+2. **Retry**: Attempts to retry failed calls before triggering the circuit breaker
+3. **Rate Limiter**: Limits the rate of calls to external services
+
+### Fallback Mechanisms
+
+Each protected method has a corresponding fallback method that is called when the circuit breaker is triggered. For example:
+
+- When chat service is down, projects can still be created without chat integration
+- When user service is down, non-critical operations return empty results
+- When subscription service is down, conservative limits are applied
+
+### Configuration
+
+Circuit breakers are configured in each service's `application.yml` file with parameters like:
+- Failure threshold
+- Sliding window size
+- Wait duration in open state
+- Retry attempts
+
+For detailed implementation information, see the `CIRCUIT_BREAKER_IMPLEMENTATION.md` file in the project-service directory.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

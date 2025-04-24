@@ -97,6 +97,182 @@ services:
     networks:
       - pm_microservice_net
 
+  config-server:
+    container_name: config-server
+    build:
+      context: ./services/config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+
+  discovery-service:
+    container_name: discovery-service
+    build:
+      context: ./services/discovery-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ./services/gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - config-server
+      - discovery-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/user_db
+
+  project-service:
+    container_name: project-service
+    build:
+      context: ./services/project-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - user-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/project_db
+
+  issue-service:
+    container_name: issue-service
+    build:
+      context: ./services/issue-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - project-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/issue_db
+
+  comment-service:
+    container_name: comment-service
+    build:
+      context: ./services/comment-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - issue-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/comment_db
+
+  invitation-service:
+    container_name: invitation-service
+    build:
+      context: ./services/invitation-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - project-service
+      - user-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/invitation_db
+
+  chat-service:
+    container_name: chat-service
+    build:
+      context: ./services/chat-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - user-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/chat_db
+
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - kafka
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+
+  subscription-service:
+    container_name: subscription-service
+    build:
+      context: ./services/subscription-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - discovery-service
+      - postgres
+      - user-service
+    networks:
+      - pm_microservice_net
+    restart: unless-stopped
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/subscription_db
+
 networks:
   pm_microservice_net:
     driver: bridge
